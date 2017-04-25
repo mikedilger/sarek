@@ -5,4 +5,4 @@ authors = ["Mike Dilger <mike@optcomp.nz>"]
 
 [dependencies]
 vk-sys = { git = "https://gitlab.com/dennis-hamester/vk-sys.git" }
-
+winit = "0.5"
