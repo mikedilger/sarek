@@ -8,3 +8,6 @@ extern crate libc;
 
 #[cfg(test)]
 mod tests;
+
+pub mod error;
+pub use error::Error;
