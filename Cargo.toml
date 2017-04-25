@@ -8,3 +8,7 @@ vk-sys = { git = "https://gitlab.com/dennis-hamester/vk-sys.git" }
 winit = "0.5"
 image = "0.10"
 libc = "0.2.21"
+
+[target.'cfg(windows)'.dependencies]
+user32-sys = "0.2"
+winapi = "0.2"
