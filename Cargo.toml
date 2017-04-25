@@ -4,3 +4,5 @@ version = "0.1.0"
 authors = ["Mike Dilger <mike@optcomp.nz>"]
 
 [dependencies]
+vk-sys = { git = "https://gitlab.com/dennis-hamester/vk-sys.git" }
+
