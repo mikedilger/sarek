@@ -14,3 +14,6 @@ mod tests;
 
 pub mod error;
 pub use error::Error;
+
+pub mod version;
+pub use version::Version;
