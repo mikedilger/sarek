@@ -18,6 +18,10 @@ pub use error::Error;
 pub mod version;
 pub use version::Version;
 
+pub mod instance;
+pub use instance::Instance;
+
+
 use std::ptr;
 use std::mem;
 use std::str;

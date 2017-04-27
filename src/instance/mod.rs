@@ -1,0 +1,134 @@
+
+use libc::c_char;
+use std::ffi::CString;
+use std::ptr;
+use vk_sys::*;
+
+use {Error, Version};
+
+pub struct ApplicationInfo {
+    pub application_name: String,
+    pub application_version: Version,
+    pub engine_name: String,
+    pub engine_version: Version,
+}
+
+pub struct InstanceCreateInfo {
+    pub application_info: ApplicationInfo,
+    pub enabled_layer_count: u32,
+    pub enabled_layer_names: Vec<String>,
+    pub enabled_extension_count: u32,
+    pub enabled_extension_names: Vec<String>,
+}
+
+pub struct Instance {
+    #[allow(dead_code)]
+    loader: InstanceProcAddrLoader,
+    instance: VkInstance,
+}
+
+impl Instance {
+    #[allow(unused_variables)]
+    pub fn new(create_info: InstanceCreateInfo) -> Result<Instance, Error>
+    {
+        // Instantiate a loader
+        let mut loader = InstanceProcAddrLoader::from_get_instance_proc_addr(
+            vkGetInstanceProcAddr);
+
+        // Load function pointers with global scope
+        unsafe { loader.load_core_null_instance(); }
+
+        // Setup strings for passing into vkCreateInstance down below.  These must
+        // not go out of scope until after that function is called.
+        let (extension_names_owned, extension_names) = {
+            let mut extension_names_owned: Vec<CString> = Vec::new();
+            for ref name in create_info.enabled_extension_names {
+                extension_names_owned.push( CString::new(name.as_bytes())? );
+            }
+            let extension_names: Vec<*const c_char> = extension_names_owned.iter()
+                .map(|name| name.as_ptr())
+                .collect();
+            (extension_names_owned, extension_names)
+        };
+
+        let app_name = CString::new(create_info.application_info.application_name.as_bytes())?;
+        let engine_name = CString::new(create_info.application_info.engine_name.as_bytes())?;
+
+        let (layer_names_owned, layer_names) = {
+            let mut layer_names_owned: Vec<CString> = Vec::new();
+            for ref name in &create_info.enabled_layer_names {
+                layer_names_owned.push( CString::new(name.as_bytes())? );
+            }
+            let layer_names: Vec<*const c_char> = layer_names_owned.iter()
+                .map(|name| name.as_ptr())
+                .collect();
+            (layer_names_owned, layer_names)
+        };
+
+        let instance = {
+            let create_info = {
+                let app_info = {
+                    VkApplicationInfo {
+                        sType: VK_STRUCTURE_TYPE_APPLICATION_INFO,
+                        pNext: ptr::null(),
+                        pApplicationName: app_name.as_ptr(),
+                        applicationVersion: create_info.application_info
+                            .application_version.to_vk(),
+                        pEngineName: engine_name.as_ptr(),
+                        engineVersion: create_info.application_info
+                            .engine_version.to_vk(),
+                        apiVersion: vk_make_version!(1, 0, 3),
+                    }
+                };
+
+                VkInstanceCreateInfo {
+                    sType: VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
+                    pNext: ptr::null(),
+                    flags: VK_INSTANCE_CREATE_DUMMY,
+                    pApplicationInfo: &app_info,
+                    enabledLayerCount: layer_names.len() as u32,
+                    ppEnabledLayerNames: if layer_names.len() > 0 {
+                        layer_names.as_ptr()
+                    } else {
+                        ptr::null()
+                    },
+                    enabledExtensionCount: extension_names.len() as u32,
+                    ppEnabledExtensionNames: if extension_names.len() > 0 {
+                        extension_names.as_ptr()
+                    } else {
+                        ptr::null()
+                    }
+                }
+            };
+
+            unsafe {
+                let mut instance: VkInstance = ptr::null_mut();
+                vk_try!((loader.core_null_instance.vkCreateInstance)(
+                    &create_info,
+                    ptr::null(),
+                    &mut instance
+                ));
+                assert!(instance != ptr::null_mut());
+                instance
+            }
+        };
+
+        // Load core instance-level functions
+        unsafe { loader.load_core(instance); }
+
+        Ok(Instance {
+            loader: loader,
+            instance: instance,
+        })
+    }
+}
+
+impl Drop for Instance {
+    fn drop(&mut self) {
+        unsafe {
+            vkDestroyInstance(
+                self.instance,
+                ptr::null());
+        }
+    }
+}
