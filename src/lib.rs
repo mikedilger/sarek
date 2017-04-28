@@ -93,3 +93,71 @@ pub fn enumerate_instance_extension_properties(layer_name: Option<&str>)
     }
     Ok(output)
 }
+
+/// See vulkan specification, section 30.1 Layers
+pub struct LayerProperties {
+    pub layer_name: String,
+    pub spec_version: u32,
+    pub implementation_version: u32,
+    pub description: String,
+}
+
+impl LayerProperties {
+    fn from_vk(vk: VkLayerProperties) -> Result<LayerProperties, Error>
+    {
+        Ok(LayerProperties {
+            layer_name: unsafe {
+                str::from_utf8(
+                    CStr::from_ptr(
+                        vk.layerName.as_ptr())
+                        .to_bytes())?
+                    .to_owned()
+            },
+            spec_version: vk.specVersion,
+            implementation_version: vk.implementationVersion,
+            description: unsafe {
+                str::from_utf8(
+                    CStr::from_ptr(
+                        vk.description.as_ptr())
+                        .to_bytes())?
+                    .to_owned()
+            },
+        })
+    }
+}
+
+/// See vulkan specification, section 30.1 Layers.
+/// Despite what the name implies, this returns a Vec not an Iterator.
+pub fn enumerate_instance_layer_properties() -> Result<Vec<LayerProperties>, Error>
+{
+    // Call once to get the property count
+    let mut property_count: u32 = 0;
+    vk_try!(unsafe { vkEnumerateInstanceLayerProperties(
+        &mut property_count,
+        ptr::null_mut()
+    )});
+
+    // Prepare room for the output
+    let capacity: usize = property_count as usize;
+    let mut properties: Vec<VkLayerProperties> = Vec::with_capacity(capacity);
+
+    // Call again to get the data
+    vk_try!(unsafe { vkEnumerateInstanceLayerProperties(
+        &mut property_count,
+        properties.as_mut_ptr()
+    )});
+
+    // Trust the data now in the properties vector
+    let properties = unsafe {
+        let p = properties.as_mut_ptr();
+        mem::forget(properties);
+        Vec::from_raw_parts(p, property_count as usize, capacity)
+    };
+
+    // Translate for output
+    let mut output: Vec<LayerProperties> = Vec::with_capacity(property_count as usize);
+    for property in properties {
+        output.push(LayerProperties::from_vk(property)?);
+    }
+    Ok(output)
+}
