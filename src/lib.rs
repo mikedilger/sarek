@@ -19,7 +19,7 @@ pub mod version;
 pub use version::Version;
 
 pub mod instance;
-pub use instance::Instance;
+pub use instance::{InstanceLoader, Instance};
 
 
 use std::ptr;

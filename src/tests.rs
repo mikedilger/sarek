@@ -1,6 +1,6 @@
 
 use {enumerate_instance_extension_properties, enumerate_instance_layer_properties};
-use instance::{ApplicationInfo, InstanceCreateInfo, Instance};
+use instance::{InstanceLoader, ApplicationInfo, InstanceCreateInfo, Instance};
 use Version;
 
 #[test]
@@ -27,7 +27,9 @@ fn core_calls() {
 
 #[test]
 fn instance() {
-    let instance = Instance::new(InstanceCreateInfo {
+    let mut loader = InstanceLoader::new();
+
+    let instance = Instance::new(&mut loader, InstanceCreateInfo {
         application_info: ApplicationInfo {
             application_name: "Test Application".to_owned(),
             application_version: Version(0,1,0),
@@ -40,5 +42,5 @@ fn instance() {
         enabled_extension_names: vec![],
     }).unwrap();
 
-    let _devices = instance.enumerate_physical_devices().unwrap();
+    let _devices = instance.enumerate_physical_devices(&mut loader).unwrap();
 }

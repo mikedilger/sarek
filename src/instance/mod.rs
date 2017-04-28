@@ -7,6 +7,21 @@ use vk_sys::*;
 
 use {Error, Version};
 
+pub struct InstanceLoader(InstanceProcAddrLoader);
+
+impl InstanceLoader {
+    pub fn new() -> InstanceLoader {
+        // Instantiate a loader
+        let mut loader = InstanceProcAddrLoader::from_get_instance_proc_addr(
+            vkGetInstanceProcAddr);
+
+        // Load function pointers with global scope
+        unsafe { loader.load_core_null_instance(); }
+
+        InstanceLoader(loader)
+    }
+}
+
 pub struct ApplicationInfo {
     pub application_name: String,
     pub application_version: Version,
@@ -23,23 +38,13 @@ pub struct InstanceCreateInfo {
 }
 
 /// See vulkan specification, section 3.2 Instances
-pub struct Instance {
-    #[allow(dead_code)]
-    loader: InstanceProcAddrLoader,
-    instance: VkInstance,
-}
+pub struct Instance(VkInstance);
 
 impl Instance {
     #[allow(unused_variables)]
-    pub fn new(create_info: InstanceCreateInfo) -> Result<Instance, Error>
+    pub fn new(loader: &mut InstanceLoader, create_info: InstanceCreateInfo)
+               -> Result<Instance, Error>
     {
-        // Instantiate a loader
-        let mut loader = InstanceProcAddrLoader::from_get_instance_proc_addr(
-            vkGetInstanceProcAddr);
-
-        // Load function pointers with global scope
-        unsafe { loader.load_core_null_instance(); }
-
         // Setup strings for passing into vkCreateInstance down below.  These must
         // not go out of scope until after that function is called.
         let (extension_names_owned, extension_names) = {
@@ -105,7 +110,7 @@ impl Instance {
 
             unsafe {
                 let mut instance: VkInstance = ptr::null_mut();
-                vk_try!((loader.core_null_instance.vkCreateInstance)(
+                vk_try!((loader.0.core_null_instance.vkCreateInstance)(
                     &create_info,
                     ptr::null(),
                     &mut instance
@@ -116,12 +121,9 @@ impl Instance {
         };
 
         // Load core instance-level functions
-        unsafe { loader.load_core(instance); }
+        unsafe { loader.0.load_core(instance); }
 
-        Ok(Instance {
-            loader: loader,
-            instance: instance,
-        })
+        Ok(Instance(instance))
     }
 }
 
@@ -129,7 +131,7 @@ impl Drop for Instance {
     fn drop(&mut self) {
         unsafe {
             vkDestroyInstance(
-                self.instance,
+                self.0,
                 ptr::null());
         }
     }
@@ -153,12 +155,13 @@ impl PhysicalDevice {
 }
 
 impl Instance {
-    pub fn enumerate_physical_devices(&self) -> Result<Vec<PhysicalDevice>, Error>
+    pub fn enumerate_physical_devices(&self, loader: &mut InstanceLoader)
+                                      -> Result<Vec<PhysicalDevice>, Error>
     {
         // Call once to get the count
         let mut physical_device_count: u32 = unsafe { mem::uninitialized() };
-        vk_try!(unsafe { (self.loader.core.vkEnumeratePhysicalDevices)(
-            self.instance,
+        vk_try!(unsafe { (loader.0.core.vkEnumeratePhysicalDevices)(
+            self.0,
             &mut physical_device_count,
             ptr::null_mut()
         )});
@@ -168,8 +171,8 @@ impl Instance {
         let mut devices: Vec<VkPhysicalDevice> = Vec::with_capacity(capacity);
 
         // Call again to get the data
-        vk_try!(unsafe { (self.loader.core.vkEnumeratePhysicalDevices)(
-            self.instance,
+        vk_try!(unsafe { (loader.0.core.vkEnumeratePhysicalDevices)(
+            self.0,
             &mut physical_device_count,
             devices.as_mut_ptr()
         )});
