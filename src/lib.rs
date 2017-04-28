@@ -162,3 +162,7 @@ pub fn enumerate_instance_layer_properties() -> Result<Vec<LayerProperties>, Err
     }
     Ok(output)
 }
+
+pub type Bool32 = VkBool32;
+pub type DeviceSize = VkDeviceSize; // u64
+pub type SampleCountFlags = VkSampleCountFlags; // u32
