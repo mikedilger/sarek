@@ -20,5 +20,5 @@ export VK_INSTANCE_LAYERS="VK_LAYER_GOOGLE_threading:VK_LAYER_LUNARG_parameter_v
 
 RUST_BACKTRACE=1 cargo test \
               --no-default-features \
-              --features="ext_validation_flags" \
+              --features="ext_validation_flags khr_get_physical_device_properties2" \
               -- --nocapture

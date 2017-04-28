@@ -193,6 +193,7 @@ pub struct PhysicalDeviceProperties {
 }
 
 impl PhysicalDevice {
+    #[cfg(not(feature = "khr_get_physical_device_properties2"))]
     pub fn get_properties(&self, loader: &mut InstanceLoader) ->
         Result<PhysicalDeviceProperties, Error>
     {
@@ -223,3 +224,6 @@ impl PhysicalDevice {
         })
     }
 }
+
+#[cfg(feature = "khr_get_physical_device_properties2")]
+include!(concat!(env!("CARGO_MANIFEST_DIR"), "/src/instance/khr_get_physical_device_properties2_1.rs"));
