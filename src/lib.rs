@@ -9,9 +9,6 @@ extern crate libc;
 // Include our macros early
 include!(concat!(env!("CARGO_MANIFEST_DIR"), "/src/macros.rs"));
 
-#[cfg(test)]
-mod tests;
-
 pub mod error;
 pub use error::Error;
 

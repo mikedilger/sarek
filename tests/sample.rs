@@ -1,34 +1,38 @@
 
-use {enumerate_instance_extension_properties, enumerate_instance_layer_properties};
-use instance::{InstanceLoader, ApplicationInfo, InstanceCreateInfo, Instance};
-use Version;
+extern crate sarek;
+
+use sarek::{enumerate_instance_extension_properties, enumerate_instance_layer_properties};
+use sarek::{Version, InstanceLoader, Instance};
+use sarek::instance::{ApplicationInfo, InstanceCreateInfo};
 
 #[test]
-fn core_calls() {
+pub fn main() {
+    // Print all available extensions (except layer extensions)
     let eps = enumerate_instance_extension_properties(None).unwrap();
     for ep in &eps {
         println!("{} (version {})", ep.extension_name, ep.spec_version);
     }
 
-    // Test enumerate_instance_extension_properties() again with a specific layer
+    // Print extensions to a particular layer
     let eps = enumerate_instance_extension_properties(
         Some("VK_LAYER_LUNARG_parameter_validation")).unwrap();
     for ep in &eps {
         println!("{} (version {})", ep.extension_name, ep.spec_version);
     }
 
+    // Print available layers
     let lps = enumerate_instance_layer_properties().unwrap();
     for lp in &lps {
         println!("{} (version {}, impl version {}): {}",
                  lp.layer_name, lp.spec_version, lp.implementation_version,
                  lp.description);
     }
-}
 
-#[test]
-fn instance() {
+
+    // Initialize an instance loader
     let mut loader = InstanceLoader::new();
 
+    // Create an instance
     let instance = Instance::new(&mut loader, InstanceCreateInfo {
         application_info: ApplicationInfo {
             application_name: "Test Application".to_owned(),
@@ -42,5 +46,6 @@ fn instance() {
         enabled_extension_names: vec![],
     }).unwrap();
 
+    // Enumerate physical devices
     let _devices = instance.enumerate_physical_devices(&mut loader).unwrap();
 }
