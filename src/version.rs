@@ -1,5 +1,5 @@
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Version(pub u32, pub u32, pub u32);
 
 impl Version {
