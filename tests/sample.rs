@@ -47,5 +47,10 @@ pub fn main() {
     }).unwrap();
 
     // Enumerate physical devices
-    let _devices = instance.enumerate_physical_devices(&mut loader).unwrap();
+    let devices = instance.enumerate_physical_devices(&mut loader).unwrap();
+
+    for device in &devices {
+        let properties = device.get_properties(&mut loader);
+        println!("Device: {:?}", properties);
+    }
 }

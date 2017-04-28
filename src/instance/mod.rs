@@ -1,4 +1,8 @@
 
+mod physical_device;
+pub use self::physical_device::{PhysicalDevice, PhysicalDeviceType, PhysicalDeviceLimits,
+                                PhysicalDeviceProperties};
+
 use libc::c_char;
 use std::ffi::CString;
 use std::ptr;
@@ -134,23 +138,6 @@ impl Drop for Instance {
                 self.0,
                 ptr::null());
         }
-    }
-}
-
-/// See vulkan specification, section 4.1 Physical Devices
-pub struct PhysicalDevice {
-    #[allow(dead_code)]
-    device: VkPhysicalDevice,
-}
-// No need to destroy VkPhysicalDevice explicitly.  They are implicitly destroyed
-// when the instance is destroyed (see Section 2.3)
-
-impl PhysicalDevice {
-    fn from_vk(vk: VkPhysicalDevice) -> Result<PhysicalDevice, Error>
-    {
-        Ok(PhysicalDevice {
-            device: vk
-        })
     }
 }
 
