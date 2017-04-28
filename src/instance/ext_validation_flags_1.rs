@@ -1,55 +1,22 @@
 
-mod physical_device;
-pub use self::physical_device::{PhysicalDevice, PhysicalDeviceType, PhysicalDeviceLimits,
-                                PhysicalDeviceProperties};
+#[repr(C)]
+pub enum ValidationCheck {
+    ValidationCheckAll = 0,
+}
 
-use libc::c_char;
-use std::ffi::CString;
-use std::ptr;
-use std::mem;
-use vk_sys::*;
-
-use {Error, Version};
-
-pub struct InstanceLoader(InstanceProcAddrLoader);
-
-impl InstanceLoader {
-    pub fn new() -> InstanceLoader {
-        // Instantiate a loader
-        let mut loader = InstanceProcAddrLoader::from_get_instance_proc_addr(
-            vkGetInstanceProcAddr);
-
-        // Load function pointers with global scope
-        unsafe { loader.load_core_null_instance(); }
-
-        InstanceLoader(loader)
+impl From<ValidationCheck> for VkValidationCheckEXT {
+    fn from(c: ValidationCheck) -> VkValidationCheckEXT {
+        unsafe {
+            mem::transmute(c)
+        }
     }
 }
 
-pub struct ApplicationInfo {
-    pub application_name: String,
-    pub application_version: Version,
-    pub engine_name: String,
-    pub engine_version: Version,
-}
-
-pub struct InstanceCreateInfo {
-    pub application_info: ApplicationInfo,
-    pub enabled_layer_count: u32,
-    pub enabled_layer_names: Vec<String>,
-    pub enabled_extension_count: u32,
-    pub enabled_extension_names: Vec<String>,
-}
-
-
-/// See vulkan specification, section 3.2 Instances
-pub struct Instance(VkInstance);
-
 impl Instance {
-    #[cfg(not(feature = "vk_1_0_27"))]
     #[allow(unused_variables)]
-    pub fn new(loader: &mut InstanceLoader, create_info: InstanceCreateInfo)
-                -> Result<Instance, Error>
+    pub fn new(loader: &mut InstanceLoader, create_info: InstanceCreateInfo,
+               mut disable_validation_checks: Vec<ValidationCheck>)
+               -> Result<Instance, Error>
     {
         // Setup strings for passing into vkCreateInstance down below.  These must
         // not go out of scope until after that function is called.
@@ -92,10 +59,23 @@ impl Instance {
             }
         };
 
+        let mut disable_validation_checks: Vec<VkValidationCheckEXT> =
+            disable_validation_checks.drain(..).map(|vc| From::from(vc)).collect();
+        let vflags = VkValidationFlagsEXT {
+            sType: VK_STRUCTURE_TYPE_VALIDATION_FLAGS_EXT,
+            pNext: ptr::null(),
+            disabledValidationCheckCount: disable_validation_checks.len() as u32,
+            pDisabledValidationChecks: disable_validation_checks.as_mut_ptr(),
+        };
+
         let create_info = {
             VkInstanceCreateInfo {
                 sType: VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
-                pNext: ptr::null(),
+                pNext: if disable_validation_checks.len() > 0 {
+                    unsafe { mem::transmute(&vflags) }
+                } else {
+                    ptr::null()
+                },
                 flags: VK_INSTANCE_CREATE_DUMMY,
                 pApplicationInfo: &app_info,
                 enabledLayerCount: layer_names.len() as u32,
@@ -130,55 +110,3 @@ impl Instance {
         Ok(Instance(instance))
     }
 }
-
-impl Drop for Instance {
-    fn drop(&mut self) {
-        unsafe {
-            vkDestroyInstance(
-                self.0,
-                ptr::null());
-        }
-    }
-}
-
-impl Instance {
-    pub fn enumerate_physical_devices(&self, loader: &mut InstanceLoader)
-                                      -> Result<Vec<PhysicalDevice>, Error>
-    {
-        // Call once to get the count
-        let mut physical_device_count: u32 = unsafe { mem::uninitialized() };
-        vk_try!(unsafe { (loader.0.core.vkEnumeratePhysicalDevices)(
-            self.0,
-            &mut physical_device_count,
-            ptr::null_mut()
-        )});
-
-        // Prepare room for the output
-        let capacity: usize = physical_device_count as usize;
-        let mut devices: Vec<VkPhysicalDevice> = Vec::with_capacity(capacity);
-
-        // Call again to get the data
-        vk_try!(unsafe { (loader.0.core.vkEnumeratePhysicalDevices)(
-            self.0,
-            &mut physical_device_count,
-            devices.as_mut_ptr()
-        )});
-
-        // Trust the data now in the devices vector
-        let devices = unsafe {
-            let ptr = devices.as_mut_ptr();
-            mem::forget(devices);
-            Vec::from_raw_parts(ptr, physical_device_count as usize, capacity)
-        };
-
-        // Translate for output
-        let mut output: Vec<PhysicalDevice> = Vec::with_capacity(physical_device_count as usize);
-        for device in devices {
-            output.push(PhysicalDevice::from_vk(device)?);
-        }
-        Ok(output)
-    }
-}
-
-#[cfg(feature = "vk_1_0_27")]
-include!(concat!(env!("CARGO_MANIFEST_DIR"), "/src/instance/ext_validation_flags_1.rs"));
