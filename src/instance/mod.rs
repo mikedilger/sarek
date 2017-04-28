@@ -2,6 +2,7 @@
 use libc::c_char;
 use std::ffi::CString;
 use std::ptr;
+use std::mem;
 use vk_sys::*;
 
 use {Error, Version};
@@ -21,6 +22,7 @@ pub struct InstanceCreateInfo {
     pub enabled_extension_names: Vec<String>,
 }
 
+/// See vulkan specification, section 3.2 Instances
 pub struct Instance {
     #[allow(dead_code)]
     loader: InstanceProcAddrLoader,
@@ -130,5 +132,60 @@ impl Drop for Instance {
                 self.instance,
                 ptr::null());
         }
+    }
+}
+
+/// See vulkan specification, section 4.1 Physical Devices
+pub struct PhysicalDevice {
+    #[allow(dead_code)]
+    device: VkPhysicalDevice,
+}
+// No need to destroy VkPhysicalDevice explicitly.  They are implicitly destroyed
+// when the instance is destroyed (see Section 2.3)
+
+impl PhysicalDevice {
+    fn from_vk(vk: VkPhysicalDevice) -> Result<PhysicalDevice, Error>
+    {
+        Ok(PhysicalDevice {
+            device: vk
+        })
+    }
+}
+
+impl Instance {
+    pub fn enumerate_physical_devices(&self) -> Result<Vec<PhysicalDevice>, Error>
+    {
+        // Call once to get the count
+        let mut physical_device_count: u32 = unsafe { mem::uninitialized() };
+        vk_try!(unsafe { (self.loader.core.vkEnumeratePhysicalDevices)(
+            self.instance,
+            &mut physical_device_count,
+            ptr::null_mut()
+        )});
+
+        // Prepare room for the output
+        let capacity: usize = physical_device_count as usize;
+        let mut devices: Vec<VkPhysicalDevice> = Vec::with_capacity(capacity);
+
+        // Call again to get the data
+        vk_try!(unsafe { (self.loader.core.vkEnumeratePhysicalDevices)(
+            self.instance,
+            &mut physical_device_count,
+            devices.as_mut_ptr()
+        )});
+
+        // Trust the data now in the devices vector
+        let devices = unsafe {
+            let ptr = devices.as_mut_ptr();
+            mem::forget(devices);
+            Vec::from_raw_parts(ptr, physical_device_count as usize, capacity)
+        };
+
+        // Translate for output
+        let mut output: Vec<PhysicalDevice> = Vec::with_capacity(physical_device_count as usize);
+        for device in devices {
+            output.push(PhysicalDevice::from_vk(device)?);
+        }
+        Ok(output)
     }
 }

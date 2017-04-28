@@ -26,8 +26,8 @@ fn core_calls() {
 }
 
 #[test]
-fn instance_creation() {
-    let _instance = Instance::new(InstanceCreateInfo {
+fn instance() {
+    let instance = Instance::new(InstanceCreateInfo {
         application_info: ApplicationInfo {
             application_name: "Test Application".to_owned(),
             application_version: Version(0,1,0),
@@ -39,4 +39,6 @@ fn instance_creation() {
         enabled_extension_count: 0,
         enabled_extension_names: vec![],
     }).unwrap();
+
+    let _devices = instance.enumerate_physical_devices().unwrap();
 }
