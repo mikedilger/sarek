@@ -69,3 +69,113 @@ vk_1_0_6 = [ "vk-sys/vk_1_0_6", "vk_1_0_5" ]
 vk_1_0_5 = [ "vk-sys/vk_1_0_5", "vk_1_0_4" ]
 vk_1_0_4 = [ "vk-sys/vk_1_0_4", "vk_1_0_3" ]
 vk_1_0_3 = [ "vk-sys/vk_1_0_3" ]
+# The following feature extensions should only be enabled if you are going to
+# use them.
+khr_surface = [ "vk-sys/khr_surface" ]
+khr_swapchain = [ "vk-sys/khr_swapchain",
+                  "khr_surface" ]
+khr_display = [ "vk-sys/khr_display",
+                "khr_surface" ]
+khr_display_swapchain = [ "vk-sys/khr_display_swapchain",
+                          "khr_swapchain", "khr_display" ]
+khr_xlib_surface = [ "vk-sys/khr_xlib_surface",
+                     "khr_surface" ]
+khr_xcb_surface = [ "vk-sys/khr_xcb_surface",
+                    "khr_surface" ]
+khr_wayland_surface = [ "vk-sys/khr_wayland_surface",
+                        "khr_surface" ]
+khr_mir_surface = [ "vk-sys/khr_mir_surface",
+                    "khr_surface" ]
+khr_android_surface = [ "vk-sys/khr_android_surface",
+                        "khr_surface" ]
+khr_win32_surface = [ "vk-sys/khr_win32_surface",
+                      "khr_surface" ]
+khr_sampler_mirror_clamp_to_edge = [ "vk-sys/khr_sampler_mirror_clamp_to_edge" ]
+khr_get_physical_device_properties2 = [ "vk-sys/khr_get_physical_device_properties2" ]
+khr_shader_draw_parameters = [ "vk-sys/khr_shader_draw_parameters" ]
+khr_maintenance1 = [ "vk-sys/khr_maintenance1" ]
+khr_push_descriptor = [ "vk-sys/khr_push_descriptor",
+                        "khr_get_physical_device_properties2" ]
+khr_incremental_present = [ "vk-sys/khr_incremental_present",
+                            "khr_swapchain" ]
+khr_descriptor_update_template = [ "vk-sys/khr_descriptor_update_template",
+                                   "khr_push_descriptor" ]
+ext_debug_report = [ "vk-sys/ext_debug_report" ]
+nv_glsl_shader = [ "vk-sys/nv_glsl_shader" ]
+img_filter_cubic = [ "vk-sys/img_filter_cubic" ]
+amd_rasterization_order = [ "vk-sys/amd_rasterization_order" ]
+amd_shader_trinary_minmax = [ "vk-sys/amd_shader_trinary_minmax" ]
+amd_shader_explicit_vertex_parameter = [ "vk-sys/amd_shader_explicit_vertex_parameter" ]
+ext_debug_marker = [ "vk-sys/ext_debug_marker",
+                     "ext_debug_report" ]
+amd_gcn_shader = [ "vk-sys/amd_gcn_shader" ]
+nv_dedicated_allocation = [ "vk-sys/nv_dedicated_allocation" ]
+amd_draw_indirect_count = [ "vk-sys/amd_draw_indirect_count" ]
+amd_negative_viewport_height = [ "vk-sys/amd_negative_viewport_height" ]
+amd_gpu_shader_half_float = [ "vk-sys/amd_gpu_shader_half_float" ]
+amd_shader_ballot = [ "vk-sys/amd_shader_ballot" ]
+khx_multiview = [ "vk-sys/khx_multiview",
+                  "khr_get_physical_device_properties2" ]
+img_format_pvrtc = [ "vk-sys/img_format_pvrtc" ]
+nv_external_memory_capabilities = [ "vk-sys/nv_external_memory_capabilities" ]
+nv_external_memory = [ "vk-sys/nv_external_memory",
+                       "nv_external_memory_capabilities" ]
+nv_external_memory_win32 = [ "vk-sys/nv_external_memory_win32",
+                             "nv_external_memory_capabilities", "nv_external_memory" ]
+nv_win32_keyed_mutex = [ "vk-sys/nv_win32_keyed_mutex",
+                         "nv_external_memory_capabilities", "nv_external_memory_win32" ]
+khx_device_group = [ "vk-sys/khx_device_group",
+                     "khr_swapchain" ]
+ext_validation_flags = [ "vk-sys/ext_validation_flags" ]
+nn_vi_surface = [ "vk-sys/nn_vi_surface",
+                  "khr_surface" ]
+ext_shader_subgroup_ballot = [ "vk-sys/ext_shader_subgroup_ballot" ]
+ext_shader_subgroup_vote = [ "vk-sys/ext_shader_subgroup_vote" ]
+khx_device_group_creation = [ "vk-sys/khx_device_group_creation",
+                              "khx_device_group" ]
+khx_external_memory_capabilities = [ "vk-sys/khx_external_memory_capabilities",
+                                     "khr_get_physical_device_properties2" ]
+khx_external_memory = [ "vk-sys/khx_external_memory",
+                        "khx_external_memory_capabilities" ]
+khx_external_memory_win32 = [ "vk-sys/khx_external_memory_win32",
+                              "khx_external_memory" ]
+khx_external_memory_fd = [ "vk-sys/khx_external_memory_fd",
+                           "khx_external_memory" ]
+khx_win32_keyed_mutex = [ "vk-sys/khx_win32_keyed_mutex",
+                          "khx_external_memory" ]
+khx_external_semaphore_capabilities = [ "vk-sys/khx_external_semaphore_capabilities",
+                                        "khr_get_physical_device_properties2" ]
+khx_external_semaphore = [ "vk-sys/khx_external_semaphore",
+                           "khx_external_semaphore_capabilities" ]
+khx_external_semaphore_win32 = [ "vk-sys/khx_external_semaphore_win32",
+                                 "khx_external_semaphore_capabilities" ]
+khx_external_semaphore_fd = [ "vk-sys/khx_external_semaphore_fd",
+                              "khx_external_semaphore_capabilities" ]
+nvx_device_generated_commands = [ "vk-sys/nvx_device_generated_commands" ]
+nv_clip_space_w_scaling = [ "vk-sys/nv_clip_space_w_scaling" ]
+ext_direct_mode_display = [ "vk-sys/ext_direct_mode_display",
+                            "khr_display" ]
+ext_acquire_xlib_display = [ "vk-sys/ext_acquire_xlib_display",
+                             "khr_display", "ext_direct_mode_display" ]
+ext_display_surface_counter = [ "vk-sys/ext_display_surface_counter",
+                                "khr_display" ]
+ext_display_control = [ "vk-sys/ext_display_control",
+                        "khr_display", "ext_display_surface_counter", "khr_swapchain" ]
+google_display_timing = [ "vk-sys/google_display_timing",
+                          "khr_swapchain" ]
+nv_sample_mask_override_coverage = [ "vk-sys/nv_sample_mask_override_coverage" ]
+nv_geometry_shader_passthrough = [ "vk-sys/nv_geometry_shader_passthrough" ]
+nv_viewport_array2 = [ "vk-sys/nv_viewport_array2" ]
+nvx_multiview_per_view_attributes = [ "vk-sys/nvx_multiview_per_view_attributes",
+                                      "khr_get_physical_device_properties2", "khx_multiview" ]
+nv_viewport_swizzle = [ "vk-sys/nv_viewport_swizzle" ]
+ext_discard_rectangles = [ "vk-sys/ext_discard_rectangles",
+                           "khr_get_physical_device_properties2" ]
+ext_swapchain_colorspace = [ "vk-sys/ext_swapchain_colorspace",
+                             "khr_surface" ]
+ext_hdr_metadata = [ "vk-sys/ext_hdr_metadata",
+                     "khr_swapchain"]
+mvk_ios_surface = [ "vk-sys/mvk_ios_surface",
+                    "khr_surface" ]
+mvk_macos_surface = [ "vk-sys/mvk_macos_surface",
+                      "khr_surface" ]
