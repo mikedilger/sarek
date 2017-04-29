@@ -3,6 +3,9 @@ mod physical_device;
 pub use self::physical_device::{PhysicalDevice, PhysicalDeviceType, PhysicalDeviceLimits,
                                 PhysicalDeviceProperties};
 
+mod loader;
+pub use self::loader::InstanceLoader;
+
 use libc::c_char;
 use std::ffi::CString;
 use std::ptr;
@@ -10,21 +13,6 @@ use std::mem;
 use vk_sys::*;
 
 use {Error, Version};
-
-pub struct InstanceLoader(InstanceProcAddrLoader);
-
-impl InstanceLoader {
-    pub fn new() -> InstanceLoader {
-        // Instantiate a loader
-        let mut loader = InstanceProcAddrLoader::from_get_instance_proc_addr(
-            vkGetInstanceProcAddr);
-
-        // Load function pointers with global scope
-        unsafe { loader.load_core_null_instance(); }
-
-        InstanceLoader(loader)
-    }
-}
 
 pub struct ApplicationInfo {
     pub application_name: String,
@@ -124,8 +112,8 @@ impl Instance {
             instance
         };
 
-        // Load core instance-level functions
-        unsafe { loader.0.load_core(instance); }
+        // Load instance functions
+        loader.load(instance);
 
         Ok(Instance(instance))
     }

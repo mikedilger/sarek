@@ -104,8 +104,8 @@ impl Instance {
             instance
         };
 
-        // Load core instance-level functions
-        unsafe { loader.0.load_core(instance); }
+        // Load instance functions
+        loader.load(instance);
 
         Ok(Instance(instance))
     }
