@@ -34,7 +34,7 @@ pub struct InstanceCreateInfo {
 pub struct Instance(VkInstance);
 
 impl Instance {
-    #[cfg(not(feature = "vk_1_0_27"))]
+    #[cfg(not(feature = "ext_validation_flags"))]
     #[allow(unused_variables)]
     pub fn new(loader: &mut InstanceLoader, create_info: InstanceCreateInfo)
                 -> Result<Instance, Error>
@@ -168,5 +168,5 @@ impl Instance {
     }
 }
 
-#[cfg(feature = "vk_1_0_27")]
+#[cfg(feature = "ext_validation_flags")]
 include!(concat!(env!("CARGO_MANIFEST_DIR"), "/src/instance/ext_validation_flags_1.rs"));

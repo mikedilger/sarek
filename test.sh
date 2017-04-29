@@ -18,4 +18,7 @@ fi
 # Enable layers here, if desired:
 export VK_INSTANCE_LAYERS="VK_LAYER_GOOGLE_threading:VK_LAYER_LUNARG_parameter_validation:VK_LAYER_LUNARG_object_tracker:VK_LAYER_LUNARG_core_validation:VK_LAYER_LUNARG_swapchain:VK_LAYER_GOOGLE_unique_objects"
 
-RUST_BACKTRACE=1 cargo test -- --nocapture
+RUST_BACKTRACE=1 cargo test \
+              --no-default-features \
+              --features="ext_validation_flags" \
+              -- --nocapture
