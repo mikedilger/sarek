@@ -44,8 +44,6 @@ pub fn main() {
             },
             enabled_layer_count: 1,
             enabled_layer_names: vec!["VK_LAYER_LUNARG_parameter_validation".to_owned()],
-            enabled_extension_count: 0,
-            enabled_extension_names: vec![],
         },
         vec![ ValidationCheck::ValidationCheckAll ]
     ).unwrap();

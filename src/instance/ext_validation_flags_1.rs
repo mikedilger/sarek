@@ -18,11 +18,13 @@ impl Instance {
                mut disable_validation_checks: Vec<ValidationCheck>)
                -> Result<Instance, Error>
     {
+        let extension_names = get_extension_names();
+
         // Setup strings for passing into vkCreateInstance down below.  These must
         // not go out of scope until after that function is called.
         let (extension_names_owned, extension_names) = {
             let mut extension_names_owned: Vec<CString> = Vec::new();
-            for ref name in create_info.enabled_extension_names {
+            for ref name in extension_names {
                 extension_names_owned.push( CString::new(name.as_bytes())? );
             }
             let extension_names: Vec<*const c_char> = extension_names_owned.iter()
