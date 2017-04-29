@@ -3,7 +3,7 @@ extern crate sarek;
 
 use sarek::{enumerate_instance_extension_properties, enumerate_instance_layer_properties};
 use sarek::{Version, InstanceLoader, Instance};
-use sarek::instance::{ApplicationInfo, InstanceCreateInfo, ValidationCheck};
+use sarek::instance::{ApplicationInfo, InstanceCreateInfo};
 
 #[test]
 pub fn main() {
@@ -45,7 +45,6 @@ pub fn main() {
             enabled_layer_count: 1,
             enabled_layer_names: vec!["VK_LAYER_LUNARG_parameter_validation".to_owned()],
         },
-        vec![ ValidationCheck::ValidationCheckAll ]
     ).unwrap();
 
     // Enumerate physical devices
