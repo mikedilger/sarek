@@ -2,10 +2,11 @@
 
 use std::mem;
 use std::str;
+use std::ptr;
 use vk_sys::*;
 use std::ffi::CStr;
 use {Error, Version, InstanceLoader};
-use {DeviceSize, SampleCountFlags, Bool32};
+use {DeviceSize, SampleCountFlags, Bool32, Extent3D};
 
 /// See vulkan specification, section 4.1 Physical Devices
 pub struct PhysicalDevice {
@@ -178,6 +179,34 @@ impl From<VkPhysicalDeviceSparseProperties> for PhysicalDeviceSparseProperties {
     }
 }
 
+pub type QueueFlags = VkQueueFlags;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[repr(C)]
+pub enum QueueFlagBits {
+    GraphicsBit = 1,
+    ComputeBit = 2,
+    TransferBit = 4,
+    SparseBindingBit = 8,
+}
+
+#[derive(Debug, Clone)]
+pub struct QueueFamilyProperties {
+    queue_flags: QueueFlags,
+    queue_count: u32,
+    timestamp_valid_bits: u32,
+    min_image_transfer_granularity: Extent3D,
+}
+impl From<VkQueueFamilyProperties> for QueueFamilyProperties {
+    fn from(vk: VkQueueFamilyProperties) -> QueueFamilyProperties {
+        assert_eq!(mem::size_of::<VkQueueFamilyProperties>(),
+                   mem::size_of::<QueueFamilyProperties>());
+        unsafe {
+            mem::transmute(vk)
+        }
+    }
+}
+
 /// See vulkan specification, section 4.1 Physical Devices
 #[derive(Debug, Clone)]
 pub struct PhysicalDeviceProperties {
@@ -222,6 +251,48 @@ impl PhysicalDevice {
             limits: From::from(properties.limits),
             sparse_properties: From::from(properties.sparseProperties),
         })
+    }
+
+    // fixme: need custom version for khr_get_physical_device_properties2
+    pub fn get_queue_family_properties(&self, loader: &mut InstanceLoader) ->
+        Result<Vec<QueueFamilyProperties>, Error>
+    {
+        // Call once to get the count
+        let mut property_count: u32 = unsafe { mem::uninitialized() };
+        unsafe {
+            (loader.0.core.vkGetPhysicalDeviceQueueFamilyProperties)(
+                self.device,
+                &mut property_count,
+                ptr::null_mut(),
+            );
+        }
+
+        // Prepare room for the output
+        let capacity: usize = property_count as usize;
+        let mut properties: Vec<VkQueueFamilyProperties> = Vec::with_capacity(capacity);
+
+        // Call again to get the data
+        unsafe {
+            (loader.0.core.vkGetPhysicalDeviceQueueFamilyProperties)(
+                self.device,
+                &mut property_count,
+                properties.as_mut_ptr(),
+            );
+        }
+
+        // Trust the data now in the properties vector
+        let properties = unsafe {
+            let ptr = properties.as_mut_ptr();
+            mem::forget(properties);
+            Vec::from_raw_parts(ptr, property_count as usize, capacity)
+        };
+
+        // Translate for output
+        let mut output: Vec<QueueFamilyProperties> = Vec::with_capacity(property_count as usize);
+        for property in properties {
+            output.push(From::from(property));
+        }
+        Ok(output)
     }
 }
 

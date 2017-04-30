@@ -53,5 +53,8 @@ pub fn main() {
     for device in &devices {
         let properties = device.get_properties(&mut loader);
         println!("Device: {:?}", properties);
+
+        let queue_family_properties =  device.get_queue_family_properties(&mut loader);
+        println!("Queue Family Properties: {:?}", queue_family_properties);
     }
 }

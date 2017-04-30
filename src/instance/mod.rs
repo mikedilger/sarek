@@ -1,7 +1,8 @@
 
 mod physical_device;
 pub use self::physical_device::{PhysicalDevice, PhysicalDeviceType, PhysicalDeviceLimits,
-                                PhysicalDeviceProperties};
+                                PhysicalDeviceProperties, PhysicalDeviceSparseProperties,
+                                QueueFlags, QueueFlagBits, QueueFamilyProperties};
 
 mod loader;
 pub use self::loader::InstanceLoader;
