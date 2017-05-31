@@ -20,5 +20,5 @@ export VK_INSTANCE_LAYERS="VK_LAYER_GOOGLE_threading:VK_LAYER_LUNARG_parameter_v
 
 RUST_BACKTRACE=1 cargo test \
               --no-default-features \
-              --features="vk_1_0_3 khr_surface khr_xcb_surface khr_xlib_surface ext_debug_report nv_external_memory_capabilities" \
+              --features="vk_1_0_3 khr_surface khr_xcb_surface khr_xlib_surface ext_debug_report" \
               -- --nocapture
