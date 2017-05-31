@@ -7,6 +7,9 @@ pub use self::physical_device::{PhysicalDevice, PhysicalDeviceType, PhysicalDevi
 mod loader;
 pub use self::loader::InstanceLoader;
 
+mod debug;
+pub use self::debug::DebugCallback;
+
 use libc::c_char;
 use std::ffi::CString;
 use std::ptr;
@@ -166,6 +169,11 @@ impl Instance {
             output.push(PhysicalDevice::from_vk(device)?);
         }
         Ok(output)
+    }
+
+    pub fn get_debug_callback(&self, loader: InstanceLoader) -> Result<DebugCallback, Error>
+    {
+        DebugCallback::new(self.0, loader)
     }
 }
 
