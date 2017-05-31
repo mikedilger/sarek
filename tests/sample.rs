@@ -48,7 +48,7 @@ pub fn main() {
     ).unwrap();
 
     // Enumerate physical devices
-    let devices = instance.enumerate_physical_devices(loader.clone()).unwrap();
+    let devices = instance.enumerate_physical_devices(&loader).unwrap();
 
     for device in &devices {
         let properties = device.get_properties(&loader);

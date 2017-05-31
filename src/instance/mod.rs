@@ -134,7 +134,7 @@ impl Drop for Instance {
 }
 
 impl Instance {
-    pub fn enumerate_physical_devices(&self, loader: InstanceLoader)
+    pub fn enumerate_physical_devices(&self, loader: &InstanceLoader)
                                       -> Result<Vec<PhysicalDevice>, Error>
     {
         // Call once to get the count
