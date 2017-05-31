@@ -11,7 +11,7 @@ use libc::c_char;
 use std::ffi::CString;
 use std::ptr;
 use std::mem;
-use vk_sys::*;
+use vks::*;
 
 use {Error, Version};
 

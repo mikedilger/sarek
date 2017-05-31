@@ -1,5 +1,5 @@
 
-extern crate vk_sys;
+extern crate vks;
 extern crate winit;
 extern crate image;
 extern crate libc;
@@ -23,7 +23,7 @@ use std::ptr;
 use std::mem;
 use std::str;
 use std::ffi::{CString, CStr};
-use vk_sys::*;
+use vks::*;
 
 /// See vulkan specification, section 30.2 Extensions
 pub struct ExtensionProperties {

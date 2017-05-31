@@ -1,5 +1,5 @@
 
-use vk_sys::*;
+use vks::*;
 
 pub struct InstanceLoader(pub InstanceProcAddrLoader);
 

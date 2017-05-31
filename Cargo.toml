@@ -12,10 +12,7 @@ keywords = [ "vulkan" ]
 winit = "0.5"
 image = "0.10"
 libc = "0.2.21"
-
-[dependencies.vk-sys]
-git = "https://gitlab.com/dennis-hamester/vk-sys.git"
-default-features = false
+vks = { version = "0.16", default-features = false }
 
 [target.'cfg(windows)'.dependencies]
 user32-sys = "0.2"
@@ -23,159 +20,159 @@ winapi = "0.2"
 
 [features]
 default = [ "vk_1_0_48" ]
-vk_1_0_48 = [ "vk-sys/vk_1_0_48", "vk_1_0_47" ]
-vk_1_0_47 = [ "vk-sys/vk_1_0_47", "vk_1_0_46" ]
-vk_1_0_46 = [ "vk-sys/vk_1_0_46", "vk_1_0_45" ]
-vk_1_0_45 = [ "vk-sys/vk_1_0_45", "vk_1_0_44" ]
-vk_1_0_44 = [ "vk-sys/vk_1_0_44", "vk_1_0_43" ]
-vk_1_0_43 = [ "vk-sys/vk_1_0_43", "vk_1_0_42" ]
-vk_1_0_42 = [ "vk-sys/vk_1_0_42", "vk_1_0_41" ]
-vk_1_0_41 = [ "vk-sys/vk_1_0_41", "vk_1_0_40" ]
-vk_1_0_40 = [ "vk-sys/vk_1_0_40", "vk_1_0_39" ]
-vk_1_0_39 = [ "vk-sys/vk_1_0_39", "vk_1_0_38" ]
-vk_1_0_38 = [ "vk-sys/vk_1_0_38", "vk_1_0_37" ]
-vk_1_0_37 = [ "vk-sys/vk_1_0_37", "vk_1_0_36" ]
-vk_1_0_36 = [ "vk-sys/vk_1_0_36", "vk_1_0_35" ]
-vk_1_0_35 = [ "vk-sys/vk_1_0_35", "vk_1_0_34" ]
-vk_1_0_34 = [ "vk-sys/vk_1_0_34", "vk_1_0_33" ]
-vk_1_0_33 = [ "vk-sys/vk_1_0_33", "vk_1_0_32" ]
-vk_1_0_32 = [ "vk-sys/vk_1_0_32", "vk_1_0_31" ]
-vk_1_0_31 = [ "vk-sys/vk_1_0_31", "vk_1_0_30" ]
-vk_1_0_30 = [ "vk-sys/vk_1_0_30", "vk_1_0_29" ]
-vk_1_0_29 = [ "vk-sys/vk_1_0_29", "vk_1_0_28" ]
-vk_1_0_28 = [ "vk-sys/vk_1_0_28", "vk_1_0_27" ]
-vk_1_0_27 = [ "vk-sys/vk_1_0_27", "vk_1_0_26" ]
-vk_1_0_26 = [ "vk-sys/vk_1_0_26", "vk_1_0_25" ]
-vk_1_0_25 = [ "vk-sys/vk_1_0_25", "vk_1_0_24" ]
-vk_1_0_24 = [ "vk-sys/vk_1_0_24", "vk_1_0_23" ]
-vk_1_0_23 = [ "vk-sys/vk_1_0_23", "vk_1_0_22" ]
-vk_1_0_22 = [ "vk-sys/vk_1_0_22", "vk_1_0_21" ]
-vk_1_0_21 = [ "vk-sys/vk_1_0_21", "vk_1_0_20" ]
-vk_1_0_20 = [ "vk-sys/vk_1_0_20", "vk_1_0_19" ]
-vk_1_0_19 = [ "vk-sys/vk_1_0_19", "vk_1_0_18" ]
-vk_1_0_18 = [ "vk-sys/vk_1_0_18", "vk_1_0_17" ]
-vk_1_0_17 = [ "vk-sys/vk_1_0_17", "vk_1_0_16" ]
-vk_1_0_16 = [ "vk-sys/vk_1_0_16", "vk_1_0_15" ]
-vk_1_0_15 = [ "vk-sys/vk_1_0_15", "vk_1_0_14" ]
-vk_1_0_14 = [ "vk-sys/vk_1_0_14", "vk_1_0_13" ]
-vk_1_0_13 = [ "vk-sys/vk_1_0_13", "vk_1_0_12" ]
-vk_1_0_12 = [ "vk-sys/vk_1_0_12", "vk_1_0_11" ]
-vk_1_0_11 = [ "vk-sys/vk_1_0_11", "vk_1_0_10" ]
-vk_1_0_10 = [ "vk-sys/vk_1_0_10", "vk_1_0_9" ]
-vk_1_0_9 = [ "vk-sys/vk_1_0_9", "vk_1_0_8" ]
-vk_1_0_8 = [ "vk-sys/vk_1_0_8", "vk_1_0_7" ]
-vk_1_0_7 = [ "vk-sys/vk_1_0_7", "vk_1_0_6" ]
-vk_1_0_6 = [ "vk-sys/vk_1_0_6", "vk_1_0_5" ]
-vk_1_0_5 = [ "vk-sys/vk_1_0_5", "vk_1_0_4" ]
-vk_1_0_4 = [ "vk-sys/vk_1_0_4", "vk_1_0_3" ]
-vk_1_0_3 = [ "vk-sys/vk_1_0_3" ]
+vk_1_0_48 = [ "vks/vk_1_0_48", "vk_1_0_47" ]
+vk_1_0_47 = [ "vks/vk_1_0_47", "vk_1_0_46" ]
+vk_1_0_46 = [ "vks/vk_1_0_46", "vk_1_0_45" ]
+vk_1_0_45 = [ "vks/vk_1_0_45", "vk_1_0_44" ]
+vk_1_0_44 = [ "vks/vk_1_0_44", "vk_1_0_43" ]
+vk_1_0_43 = [ "vks/vk_1_0_43", "vk_1_0_42" ]
+vk_1_0_42 = [ "vks/vk_1_0_42", "vk_1_0_41" ]
+vk_1_0_41 = [ "vks/vk_1_0_41", "vk_1_0_40" ]
+vk_1_0_40 = [ "vks/vk_1_0_40", "vk_1_0_39" ]
+vk_1_0_39 = [ "vks/vk_1_0_39", "vk_1_0_38" ]
+vk_1_0_38 = [ "vks/vk_1_0_38", "vk_1_0_37" ]
+vk_1_0_37 = [ "vks/vk_1_0_37", "vk_1_0_36" ]
+vk_1_0_36 = [ "vks/vk_1_0_36", "vk_1_0_35" ]
+vk_1_0_35 = [ "vks/vk_1_0_35", "vk_1_0_34" ]
+vk_1_0_34 = [ "vks/vk_1_0_34", "vk_1_0_33" ]
+vk_1_0_33 = [ "vks/vk_1_0_33", "vk_1_0_32" ]
+vk_1_0_32 = [ "vks/vk_1_0_32", "vk_1_0_31" ]
+vk_1_0_31 = [ "vks/vk_1_0_31", "vk_1_0_30" ]
+vk_1_0_30 = [ "vks/vk_1_0_30", "vk_1_0_29" ]
+vk_1_0_29 = [ "vks/vk_1_0_29", "vk_1_0_28" ]
+vk_1_0_28 = [ "vks/vk_1_0_28", "vk_1_0_27" ]
+vk_1_0_27 = [ "vks/vk_1_0_27", "vk_1_0_26" ]
+vk_1_0_26 = [ "vks/vk_1_0_26", "vk_1_0_25" ]
+vk_1_0_25 = [ "vks/vk_1_0_25", "vk_1_0_24" ]
+vk_1_0_24 = [ "vks/vk_1_0_24", "vk_1_0_23" ]
+vk_1_0_23 = [ "vks/vk_1_0_23", "vk_1_0_22" ]
+vk_1_0_22 = [ "vks/vk_1_0_22", "vk_1_0_21" ]
+vk_1_0_21 = [ "vks/vk_1_0_21", "vk_1_0_20" ]
+vk_1_0_20 = [ "vks/vk_1_0_20", "vk_1_0_19" ]
+vk_1_0_19 = [ "vks/vk_1_0_19", "vk_1_0_18" ]
+vk_1_0_18 = [ "vks/vk_1_0_18", "vk_1_0_17" ]
+vk_1_0_17 = [ "vks/vk_1_0_17", "vk_1_0_16" ]
+vk_1_0_16 = [ "vks/vk_1_0_16", "vk_1_0_15" ]
+vk_1_0_15 = [ "vks/vk_1_0_15", "vk_1_0_14" ]
+vk_1_0_14 = [ "vks/vk_1_0_14", "vk_1_0_13" ]
+vk_1_0_13 = [ "vks/vk_1_0_13", "vk_1_0_12" ]
+vk_1_0_12 = [ "vks/vk_1_0_12", "vk_1_0_11" ]
+vk_1_0_11 = [ "vks/vk_1_0_11", "vk_1_0_10" ]
+vk_1_0_10 = [ "vks/vk_1_0_10", "vk_1_0_9" ]
+vk_1_0_9 = [ "vks/vk_1_0_9", "vk_1_0_8" ]
+vk_1_0_8 = [ "vks/vk_1_0_8", "vk_1_0_7" ]
+vk_1_0_7 = [ "vks/vk_1_0_7", "vk_1_0_6" ]
+vk_1_0_6 = [ "vks/vk_1_0_6", "vk_1_0_5" ]
+vk_1_0_5 = [ "vks/vk_1_0_5", "vk_1_0_4" ]
+vk_1_0_4 = [ "vks/vk_1_0_4", "vk_1_0_3" ]
+vk_1_0_3 = [ "vks/vk_1_0_3" ]
 # The following feature extensions should only be enabled if you are going to
 # use them.
-khr_surface = [ "vk-sys/khr_surface" ]
-khr_swapchain = [ "vk-sys/khr_swapchain",
+khr_surface = [ "vks/khr_surface" ]
+khr_swapchain = [ "vks/khr_swapchain",
                   "khr_surface" ]
-khr_display = [ "vk-sys/khr_display",
+khr_display = [ "vks/khr_display",
                 "khr_surface" ]
-khr_display_swapchain = [ "vk-sys/khr_display_swapchain",
+khr_display_swapchain = [ "vks/khr_display_swapchain",
                           "khr_swapchain", "khr_display" ]
-khr_xlib_surface = [ "vk-sys/khr_xlib_surface",
+khr_xlib_surface = [ "vks/khr_xlib_surface",
                      "khr_surface" ]
-khr_xcb_surface = [ "vk-sys/khr_xcb_surface",
+khr_xcb_surface = [ "vks/khr_xcb_surface",
                     "khr_surface" ]
-khr_wayland_surface = [ "vk-sys/khr_wayland_surface",
+khr_wayland_surface = [ "vks/khr_wayland_surface",
                         "khr_surface" ]
-khr_mir_surface = [ "vk-sys/khr_mir_surface",
+khr_mir_surface = [ "vks/khr_mir_surface",
                     "khr_surface" ]
-khr_android_surface = [ "vk-sys/khr_android_surface",
+khr_android_surface = [ "vks/khr_android_surface",
                         "khr_surface" ]
-khr_win32_surface = [ "vk-sys/khr_win32_surface",
+khr_win32_surface = [ "vks/khr_win32_surface",
                       "khr_surface" ]
-khr_sampler_mirror_clamp_to_edge = [ "vk-sys/khr_sampler_mirror_clamp_to_edge" ]
-khr_get_physical_device_properties2 = [ "vk-sys/khr_get_physical_device_properties2" ]
-khr_shader_draw_parameters = [ "vk-sys/khr_shader_draw_parameters" ]
-khr_maintenance1 = [ "vk-sys/khr_maintenance1" ]
-khr_push_descriptor = [ "vk-sys/khr_push_descriptor",
+khr_sampler_mirror_clamp_to_edge = [ "vks/khr_sampler_mirror_clamp_to_edge" ]
+khr_get_physical_device_properties2 = [ "vks/khr_get_physical_device_properties2" ]
+khr_shader_draw_parameters = [ "vks/khr_shader_draw_parameters" ]
+khr_maintenance1 = [ "vks/khr_maintenance1" ]
+khr_push_descriptor = [ "vks/khr_push_descriptor",
                         "khr_get_physical_device_properties2" ]
-khr_incremental_present = [ "vk-sys/khr_incremental_present",
+khr_incremental_present = [ "vks/khr_incremental_present",
                             "khr_swapchain" ]
-khr_descriptor_update_template = [ "vk-sys/khr_descriptor_update_template",
+khr_descriptor_update_template = [ "vks/khr_descriptor_update_template",
                                    "khr_push_descriptor" ]
-ext_debug_report = [ "vk-sys/ext_debug_report" ]
-nv_glsl_shader = [ "vk-sys/nv_glsl_shader" ]
-img_filter_cubic = [ "vk-sys/img_filter_cubic" ]
-amd_rasterization_order = [ "vk-sys/amd_rasterization_order" ]
-amd_shader_trinary_minmax = [ "vk-sys/amd_shader_trinary_minmax" ]
-amd_shader_explicit_vertex_parameter = [ "vk-sys/amd_shader_explicit_vertex_parameter" ]
-ext_debug_marker = [ "vk-sys/ext_debug_marker",
+ext_debug_report = [ "vks/ext_debug_report" ]
+nv_glsl_shader = [ "vks/nv_glsl_shader" ]
+img_filter_cubic = [ "vks/img_filter_cubic" ]
+amd_rasterization_order = [ "vks/amd_rasterization_order" ]
+amd_shader_trinary_minmax = [ "vks/amd_shader_trinary_minmax" ]
+amd_shader_explicit_vertex_parameter = [ "vks/amd_shader_explicit_vertex_parameter" ]
+ext_debug_marker = [ "vks/ext_debug_marker",
                      "ext_debug_report" ]
-amd_gcn_shader = [ "vk-sys/amd_gcn_shader" ]
-nv_dedicated_allocation = [ "vk-sys/nv_dedicated_allocation" ]
-amd_draw_indirect_count = [ "vk-sys/amd_draw_indirect_count" ]
-amd_negative_viewport_height = [ "vk-sys/amd_negative_viewport_height" ]
-amd_gpu_shader_half_float = [ "vk-sys/amd_gpu_shader_half_float" ]
-amd_shader_ballot = [ "vk-sys/amd_shader_ballot" ]
-khx_multiview = [ "vk-sys/khx_multiview",
+amd_gcn_shader = [ "vks/amd_gcn_shader" ]
+nv_dedicated_allocation = [ "vks/nv_dedicated_allocation" ]
+amd_draw_indirect_count = [ "vks/amd_draw_indirect_count" ]
+amd_negative_viewport_height = [ "vks/amd_negative_viewport_height" ]
+amd_gpu_shader_half_float = [ "vks/amd_gpu_shader_half_float" ]
+amd_shader_ballot = [ "vks/amd_shader_ballot" ]
+khx_multiview = [ "vks/khx_multiview",
                   "khr_get_physical_device_properties2" ]
-img_format_pvrtc = [ "vk-sys/img_format_pvrtc" ]
-nv_external_memory_capabilities = [ "vk-sys/nv_external_memory_capabilities" ]
-nv_external_memory = [ "vk-sys/nv_external_memory",
+img_format_pvrtc = [ "vks/img_format_pvrtc" ]
+nv_external_memory_capabilities = [ "vks/nv_external_memory_capabilities" ]
+nv_external_memory = [ "vks/nv_external_memory",
                        "nv_external_memory_capabilities" ]
-nv_external_memory_win32 = [ "vk-sys/nv_external_memory_win32",
+nv_external_memory_win32 = [ "vks/nv_external_memory_win32",
                              "nv_external_memory_capabilities", "nv_external_memory" ]
-nv_win32_keyed_mutex = [ "vk-sys/nv_win32_keyed_mutex",
+nv_win32_keyed_mutex = [ "vks/nv_win32_keyed_mutex",
                          "nv_external_memory_capabilities", "nv_external_memory_win32" ]
-khx_device_group = [ "vk-sys/khx_device_group",
+khx_device_group = [ "vks/khx_device_group",
                      "khr_swapchain" ]
-ext_validation_flags = [ "vk-sys/ext_validation_flags" ]
-nn_vi_surface = [ "vk-sys/nn_vi_surface",
+ext_validation_flags = [ "vks/ext_validation_flags" ]
+nn_vi_surface = [ "vks/nn_vi_surface",
                   "khr_surface" ]
-ext_shader_subgroup_ballot = [ "vk-sys/ext_shader_subgroup_ballot" ]
-ext_shader_subgroup_vote = [ "vk-sys/ext_shader_subgroup_vote" ]
-khx_device_group_creation = [ "vk-sys/khx_device_group_creation",
+ext_shader_subgroup_ballot = [ "vks/ext_shader_subgroup_ballot" ]
+ext_shader_subgroup_vote = [ "vks/ext_shader_subgroup_vote" ]
+khx_device_group_creation = [ "vks/khx_device_group_creation",
                               "khx_device_group" ]
-khx_external_memory_capabilities = [ "vk-sys/khx_external_memory_capabilities",
+khx_external_memory_capabilities = [ "vks/khx_external_memory_capabilities",
                                      "khr_get_physical_device_properties2" ]
-khx_external_memory = [ "vk-sys/khx_external_memory",
+khx_external_memory = [ "vks/khx_external_memory",
                         "khx_external_memory_capabilities" ]
-khx_external_memory_win32 = [ "vk-sys/khx_external_memory_win32",
+khx_external_memory_win32 = [ "vks/khx_external_memory_win32",
                               "khx_external_memory" ]
-khx_external_memory_fd = [ "vk-sys/khx_external_memory_fd",
+khx_external_memory_fd = [ "vks/khx_external_memory_fd",
                            "khx_external_memory" ]
-khx_win32_keyed_mutex = [ "vk-sys/khx_win32_keyed_mutex",
+khx_win32_keyed_mutex = [ "vks/khx_win32_keyed_mutex",
                           "khx_external_memory" ]
-khx_external_semaphore_capabilities = [ "vk-sys/khx_external_semaphore_capabilities",
+khx_external_semaphore_capabilities = [ "vks/khx_external_semaphore_capabilities",
                                         "khr_get_physical_device_properties2" ]
-khx_external_semaphore = [ "vk-sys/khx_external_semaphore",
+khx_external_semaphore = [ "vks/khx_external_semaphore",
                            "khx_external_semaphore_capabilities" ]
-khx_external_semaphore_win32 = [ "vk-sys/khx_external_semaphore_win32",
+khx_external_semaphore_win32 = [ "vks/khx_external_semaphore_win32",
                                  "khx_external_semaphore_capabilities" ]
-khx_external_semaphore_fd = [ "vk-sys/khx_external_semaphore_fd",
+khx_external_semaphore_fd = [ "vks/khx_external_semaphore_fd",
                               "khx_external_semaphore_capabilities" ]
-nvx_device_generated_commands = [ "vk-sys/nvx_device_generated_commands" ]
-nv_clip_space_w_scaling = [ "vk-sys/nv_clip_space_w_scaling" ]
-ext_direct_mode_display = [ "vk-sys/ext_direct_mode_display",
+nvx_device_generated_commands = [ "vks/nvx_device_generated_commands" ]
+nv_clip_space_w_scaling = [ "vks/nv_clip_space_w_scaling" ]
+ext_direct_mode_display = [ "vks/ext_direct_mode_display",
                             "khr_display" ]
-ext_acquire_xlib_display = [ "vk-sys/ext_acquire_xlib_display",
+ext_acquire_xlib_display = [ "vks/ext_acquire_xlib_display",
                              "khr_display", "ext_direct_mode_display" ]
-ext_display_surface_counter = [ "vk-sys/ext_display_surface_counter",
+ext_display_surface_counter = [ "vks/ext_display_surface_counter",
                                 "khr_display" ]
-ext_display_control = [ "vk-sys/ext_display_control",
+ext_display_control = [ "vks/ext_display_control",
                         "khr_display", "ext_display_surface_counter", "khr_swapchain" ]
-google_display_timing = [ "vk-sys/google_display_timing",
+google_display_timing = [ "vks/google_display_timing",
                           "khr_swapchain" ]
-nv_sample_mask_override_coverage = [ "vk-sys/nv_sample_mask_override_coverage" ]
-nv_geometry_shader_passthrough = [ "vk-sys/nv_geometry_shader_passthrough" ]
-nv_viewport_array2 = [ "vk-sys/nv_viewport_array2" ]
-nvx_multiview_per_view_attributes = [ "vk-sys/nvx_multiview_per_view_attributes",
+nv_sample_mask_override_coverage = [ "vks/nv_sample_mask_override_coverage" ]
+nv_geometry_shader_passthrough = [ "vks/nv_geometry_shader_passthrough" ]
+nv_viewport_array2 = [ "vks/nv_viewport_array2" ]
+nvx_multiview_per_view_attributes = [ "vks/nvx_multiview_per_view_attributes",
                                       "khr_get_physical_device_properties2", "khx_multiview" ]
-nv_viewport_swizzle = [ "vk-sys/nv_viewport_swizzle" ]
-ext_discard_rectangles = [ "vk-sys/ext_discard_rectangles",
+nv_viewport_swizzle = [ "vks/nv_viewport_swizzle" ]
+ext_discard_rectangles = [ "vks/ext_discard_rectangles",
                            "khr_get_physical_device_properties2" ]
-ext_swapchain_colorspace = [ "vk-sys/ext_swapchain_colorspace",
+ext_swapchain_colorspace = [ "vks/ext_swapchain_colorspace",
                              "khr_surface" ]
-ext_hdr_metadata = [ "vk-sys/ext_hdr_metadata",
+ext_hdr_metadata = [ "vks/ext_hdr_metadata",
                      "khr_swapchain"]
-mvk_ios_surface = [ "vk-sys/mvk_ios_surface",
+mvk_ios_surface = [ "vks/mvk_ios_surface",
                     "khr_surface" ]
-mvk_macos_surface = [ "vk-sys/mvk_macos_surface",
+mvk_macos_surface = [ "vks/mvk_macos_surface",
                       "khr_surface" ]

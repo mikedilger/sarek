@@ -2,7 +2,7 @@
 use std::convert::From;
 use std::ffi::NulError;
 use std::str::Utf8Error;
-use vk_sys::VkResult;
+use vks::VkResult;
 
 #[derive(Debug)]
 pub enum Error {

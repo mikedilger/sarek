@@ -3,7 +3,7 @@
 use std::mem;
 use std::str;
 use std::ptr;
-use vk_sys::*;
+use vks::*;
 use std::ffi::CStr;
 use {Error, Version, InstanceLoader};
 use {DeviceSize, SampleCountFlags, Bool32, Extent3D};
