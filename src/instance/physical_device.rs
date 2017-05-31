@@ -223,7 +223,7 @@ pub struct PhysicalDeviceProperties {
 
 impl PhysicalDevice {
     #[cfg(not(feature = "khr_get_physical_device_properties2"))]
-    pub fn get_properties(&self, loader: &mut InstanceLoader) ->
+    pub fn get_properties(&self, loader: &InstanceLoader) ->
         Result<PhysicalDeviceProperties, Error>
     {
         let mut properties: VkPhysicalDeviceProperties = unsafe { mem::uninitialized() };
@@ -254,7 +254,7 @@ impl PhysicalDevice {
     }
 
     // fixme: need custom version for khr_get_physical_device_properties2
-    pub fn get_queue_family_properties(&self, loader: &mut InstanceLoader) ->
+    pub fn get_queue_family_properties(&self, loader: &InstanceLoader) ->
         Result<Vec<QueueFamilyProperties>, Error>
     {
         // Call once to get the count

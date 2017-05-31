@@ -35,8 +35,8 @@ pub struct Instance(VkInstance);
 impl Instance {
     #[cfg(not(feature = "ext_validation_flags"))]
     #[allow(unused_variables)]
-    pub fn new(loader: &mut InstanceLoader, create_info: InstanceCreateInfo)
-                -> Result<Instance, Error>
+    pub fn new(mut loader: InstanceLoader, create_info: InstanceCreateInfo)
+               -> Result<(Instance, InstanceLoader), Error>
     {
         let extension_names = get_extension_names();
 
@@ -114,9 +114,9 @@ impl Instance {
         };
 
         // Load instance functions
-        loader.load(instance);
+        loader.load(instance)?;
 
-        Ok(Instance(instance))
+        Ok((Instance(instance), loader))
     }
 }
 
@@ -131,7 +131,7 @@ impl Drop for Instance {
 }
 
 impl Instance {
-    pub fn enumerate_physical_devices(&self, loader: &mut InstanceLoader)
+    pub fn enumerate_physical_devices(&self, loader: InstanceLoader)
                                       -> Result<Vec<PhysicalDevice>, Error>
     {
         // Call once to get the count

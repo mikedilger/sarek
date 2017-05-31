@@ -2,7 +2,7 @@
 use std::ptr;
 
 impl PhysicalDevice {
-    pub fn get_properties(&self, loader: &mut InstanceLoader) ->
+    pub fn get_properties(&self, loader: &InstanceLoader) ->
         Result<PhysicalDeviceProperties, Error>
     {
         let mut properties = VkPhysicalDeviceProperties2KHR {

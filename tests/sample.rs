@@ -30,11 +30,11 @@ pub fn main() {
 
 
     // Initialize an instance loader
-    let mut loader = InstanceLoader::new();
+    let loader = InstanceLoader::new();
 
     // Create an instance
-    let instance = Instance::new(
-        &mut loader,
+    let (instance, loader) = Instance::new(
+        loader,
         InstanceCreateInfo {
             application_info: ApplicationInfo {
                 application_name: "Test Application".to_owned(),
@@ -48,13 +48,13 @@ pub fn main() {
     ).unwrap();
 
     // Enumerate physical devices
-    let devices = instance.enumerate_physical_devices(&mut loader).unwrap();
+    let devices = instance.enumerate_physical_devices(loader.clone()).unwrap();
 
     for device in &devices {
-        let properties = device.get_properties(&mut loader);
+        let properties = device.get_properties(&loader);
         println!("Device: {:?}", properties);
 
-        let queue_family_properties =  device.get_queue_family_properties(&mut loader);
+        let queue_family_properties =  device.get_queue_family_properties(&loader);
         println!("Queue Family Properties: {:?}", queue_family_properties);
     }
 }

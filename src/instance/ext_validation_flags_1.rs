@@ -14,9 +14,9 @@ impl From<ValidationCheck> for VkValidationCheckEXT {
 
 impl Instance {
     #[allow(unused_variables)]
-    pub fn new(loader: &mut InstanceLoader, create_info: InstanceCreateInfo,
+    pub fn new(mut loader: InstanceLoader, create_info: InstanceCreateInfo,
                mut disable_validation_checks: Vec<ValidationCheck>)
-               -> Result<Instance, Error>
+               -> Result<(Instance, InstanceLoader), Error>
     {
         let extension_names = get_extension_names();
 
@@ -107,8 +107,8 @@ impl Instance {
         };
 
         // Load instance functions
-        loader.load(instance);
+        loader.load(instance)?;
 
-        Ok(Instance(instance))
+        Ok((Instance(instance), loader))
     }
 }
