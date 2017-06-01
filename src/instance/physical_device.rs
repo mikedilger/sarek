@@ -162,11 +162,11 @@ impl From<VkPhysicalDeviceLimits> for PhysicalDeviceLimits {
 // consider using a bit vector in a u8
 #[derive(Debug, Clone)]
 pub struct PhysicalDeviceSparseProperties {
-    residency_standard_2d_block_shape: Bool32,
-    residency_standard_2d_multisample_block_shape: Bool32,
-    residency_standard_3d_block_shape: Bool32,
-    residency_aligned_mip_size: Bool32,
-    residency_non_resident_strict: Bool32,
+    pub residency_standard_2d_block_shape: Bool32,
+    pub residency_standard_2d_multisample_block_shape: Bool32,
+    pub residency_standard_3d_block_shape: Bool32,
+    pub residency_aligned_mip_size: Bool32,
+    pub residency_non_resident_strict: Bool32,
 }
 
 impl From<VkPhysicalDeviceSparseProperties> for PhysicalDeviceSparseProperties {
@@ -192,10 +192,10 @@ pub enum QueueFlagBits {
 
 #[derive(Debug, Clone)]
 pub struct QueueFamilyProperties {
-    queue_flags: QueueFlags,
-    queue_count: u32,
-    timestamp_valid_bits: u32,
-    min_image_transfer_granularity: Extent3D,
+    pub queue_flags: QueueFlags,
+    pub queue_count: u32,
+    pub timestamp_valid_bits: u32,
+    pub min_image_transfer_granularity: Extent3D,
 }
 impl From<VkQueueFamilyProperties> for QueueFamilyProperties {
     fn from(vk: VkQueueFamilyProperties) -> QueueFamilyProperties {
@@ -219,6 +219,24 @@ pub struct PhysicalDeviceProperties {
     pub pipeline_cache_uuid: [u8; VK_UUID_SIZE],
     pub limits: PhysicalDeviceLimits,
     pub sparse_properties: PhysicalDeviceSparseProperties,
+}
+
+#[derive(Debug, Clone)]
+pub struct ExtensionProperties {
+    pub extension_name: String,
+    pub spec_version: u32,
+}
+impl From<VkExtensionProperties> for ExtensionProperties {
+    fn from(vk: VkExtensionProperties) -> ExtensionProperties {
+        ExtensionProperties {
+            extension_name: unsafe {
+                String::from_utf8_lossy(
+                    CStr::from_ptr(vk.extensionName.as_ptr()).to_bytes()
+                ).into_owned()
+            },
+            spec_version: vk.specVersion
+        }
+    }
 }
 
 impl PhysicalDevice {
@@ -289,6 +307,47 @@ impl PhysicalDevice {
 
         // Translate for output
         let mut output: Vec<QueueFamilyProperties> = Vec::with_capacity(property_count as usize);
+        for property in properties {
+            output.push(From::from(property));
+        }
+        Ok(output)
+    }
+
+    pub fn get_extension_properties(&self, loader: &InstanceLoader) ->
+        Result<Vec<ExtensionProperties>, Error>
+    {
+        // Call once to get the count
+        let mut property_count: u32 = unsafe { mem::uninitialized() };
+
+        unsafe {
+            (loader.0.core.vkEnumerateDeviceExtensionProperties)(
+                self.device,
+                ptr::null(), // pLayerName: *const c_char
+                &mut property_count, // pProprtyCount: *mut u32
+                ptr::null_mut()); // pProperties: *mut VkExtensionProperties
+        }
+
+        let capacity: usize = property_count as usize;
+        let mut properties: Vec<VkExtensionProperties> = Vec::with_capacity(capacity);
+
+        // Call again to get the data
+        unsafe {
+            (loader.0.core.vkEnumerateDeviceExtensionProperties)(
+                self.device,
+                ptr::null(), // pLayerName: *const c_char
+                &mut property_count, // pProprtyCount: *mut u32
+                properties.as_mut_ptr()); // pProperties: *mut VkExtensionProperties
+        }
+
+        // Trust the data now in the properties vector
+        let properties = unsafe {
+            let ptr = properties.as_mut_ptr();
+            mem::forget(properties);
+            Vec::from_raw_parts(ptr, property_count as usize, capacity)
+        };
+
+        // Translate for output
+        let mut output: Vec<ExtensionProperties> = Vec::with_capacity(property_count as usize);
         for property in properties {
             output.push(From::from(property));
         }
