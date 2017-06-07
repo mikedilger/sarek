@@ -1,4 +1,5 @@
 
+extern crate winit;
 extern crate sarek;
 
 use sarek::{enumerate_instance_extension_properties, enumerate_instance_layer_properties};
@@ -28,6 +29,14 @@ pub fn main() {
                  lp.description);
     }
 
+    // Get a window
+    let window_events_loop = winit::EventsLoop::new();
+    let _window = winit::WindowBuilder::new()
+        .with_title("Sarek Test")
+        .with_visibility(false)
+        .with_dimensions(100,100)
+        .with_decorations(true)
+        .build(&window_events_loop).unwrap();
 
     // Initialize an instance loader
     let loader = InstanceLoader::new();
