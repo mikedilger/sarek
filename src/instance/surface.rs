@@ -17,6 +17,13 @@ pub struct Surface {
     loader: InstanceLoader
 }
 
+impl Surface {
+    pub fn inner(&self) -> VkSurfaceKHR
+    {
+        self.surface
+    }
+}
+
 impl Instance {
     #[cfg(feature = "khr_xlib_surface")]
     pub fn create_surface(&self, loader: InstanceLoader, window: &winit::Window)
