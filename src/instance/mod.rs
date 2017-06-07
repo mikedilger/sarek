@@ -11,6 +11,11 @@ pub use self::loader::InstanceLoader;
 mod debug;
 pub use self::debug::DebugCallback;
 
+#[cfg(feature = "khr_surface")]
+mod surface;
+#[cfg(feature = "khr_surface")]
+pub use self::surface::Surface;
+
 use libc::c_char;
 use std::ffi::CString;
 use std::ptr;

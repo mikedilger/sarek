@@ -31,7 +31,7 @@ pub fn main() {
 
     // Get a window
     let window_events_loop = winit::EventsLoop::new();
-    let _window = winit::WindowBuilder::new()
+    let window = winit::WindowBuilder::new()
         .with_title("Sarek Test")
         .with_visibility(false)
         .with_dimensions(100,100)
@@ -55,6 +55,9 @@ pub fn main() {
             enabled_layer_names: vec!["VK_LAYER_LUNARG_parameter_validation".to_owned()],
         },
     ).unwrap();
+
+    // Create surface (tie instance to window)
+    let _surface = instance.create_surface(loader.clone(), &window).unwrap();
 
     // Enumerate physical devices
     let devices = instance.enumerate_physical_devices(&loader).unwrap();
