@@ -7,6 +7,11 @@ use winit;
 use super::{Instance, InstanceLoader};
 use Error;
 
+#[cfg(windows)]
+use winapi;
+#[cfg(windows)]
+use user32;
+
 pub struct Surface {
     surface: VkSurfaceKHR,
     loader: InstanceLoader
@@ -43,7 +48,35 @@ impl Instance {
         })
     }
 
-    //#[cfg(feature = "khr_win32_surface")]
+    #[cfg(feature = "khr_win32_surface")]
+    pub fn create_surface(&self, loader: InstanceLoader, window: &winit::Window)
+                          -> Result<Surface, Error>
+    {
+        use winit::os::windows::WindowExt;
+
+        let hwnd = window.get_hwnd() as *mut winapi::windef::HWND__;
+        let hinstance = user32::GetWindow(hwnd, 0) as *const ();
+        let create_info = VkWin32SurfaceCreateInfoKHR {
+            sType: VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR,
+            pNext: ptr::null(),
+            flags: Default::default(),
+            hinstance: hinstance,
+            hwnd: hwnd as *const (),
+        };
+        let surface = unsafe {
+            let mut surface: VkSurfaceKHR = mem::uninitialized();
+            vk_try!((loader.0.khr_win32_surface.vkCreateWin32SurfaceKHR)(
+                self.0,
+                &create_info,
+                ptr::null(), // allocator
+                &mut surface));
+            surface
+        };
+        Ok(Surface {
+            surface: surface,
+            loader: loader
+        })
+    }
 
     //#[cfg(feature = "khr_xcb_surface")]
 
