@@ -9,7 +9,7 @@ license = "MIT or Apache-2.0"
 keywords = [ "vulkan" ]
 
 [dependencies]
-winit = "0.5"
+winit = "0.6"
 image = "0.10"
 libc = "0.2.21"
 vks = { version = "0.16", default-features = false }
