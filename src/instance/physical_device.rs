@@ -7,6 +7,8 @@ use vks::*;
 use std::ffi::CStr;
 use {Error, Version, InstanceLoader};
 use {DeviceSize, SampleCountFlags, Bool32, Extent3D};
+#[cfg(feature = "khr_surface")]
+use instance::{Surface};
 
 /// See vulkan specification, section 4.1 Physical Devices
 pub struct PhysicalDevice {
@@ -352,6 +354,23 @@ impl PhysicalDevice {
             output.push(From::from(property));
         }
         Ok(output)
+    }
+
+    #[cfg(feature = "khr_surface")]
+    pub fn get_surface_support(&self, loader: &InstanceLoader, queue_family_index: u32,
+                               surface: &Surface)
+                               -> Result<bool, Error>
+    {
+        Ok( unsafe {
+            let mut supported: u32 = mem::uninitialized();
+            vk_try!((loader.0.khr_surface.vkGetPhysicalDeviceSurfaceSupportKHR)(
+                self.device,
+                queue_family_index,
+                surface.inner(),
+                &mut supported
+            ));
+            supported
+        } != 0)
     }
 }
 
