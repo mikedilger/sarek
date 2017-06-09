@@ -14,6 +14,7 @@ use user32;
 
 pub struct Surface {
     surface: VkSurfaceKHR,
+    instance: VkInstance, // copy; do not drop from here.
     loader: InstanceLoader
 }
 
@@ -21,6 +22,17 @@ impl Surface {
     pub fn inner(&self) -> VkSurfaceKHR
     {
         self.surface
+    }
+}
+
+impl Drop for Surface {
+    fn drop(&mut self) {
+        unsafe {
+            (self.loader.0.khr_surface.vkDestroySurfaceKHR)(
+                self.instance,
+                self.surface,
+                ptr::null());
+        }
     }
 }
 
@@ -51,6 +63,7 @@ impl Instance {
         };
         Ok(Surface {
             surface: surface,
+            instance: self.0.clone(),
             loader: loader
         })
     }
@@ -81,6 +94,7 @@ impl Instance {
         };
         Ok(Surface {
             surface: surface,
+            instance: self.0.clone(),
             loader: loader
         })
     }
