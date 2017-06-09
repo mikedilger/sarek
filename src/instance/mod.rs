@@ -1,10 +1,4 @@
 
-mod physical_device;
-pub use self::physical_device::{PhysicalDevice, PhysicalDeviceType, PhysicalDeviceLimits,
-                                PhysicalDeviceProperties, PhysicalDeviceSparseProperties,
-                                QueueFlags, QueueFlagBits, QueueFamilyProperties,
-                                ExtensionProperties};
-
 mod loader;
 pub use self::loader::InstanceLoader;
 
@@ -15,6 +9,12 @@ pub use self::debug::DebugCallback;
 mod surface;
 #[cfg(feature = "khr_surface")]
 pub use self::surface::Surface;
+
+mod physical_device;
+pub use self::physical_device::{PhysicalDevice, PhysicalDeviceType, PhysicalDeviceLimits,
+                                PhysicalDeviceProperties, PhysicalDeviceSparseProperties,
+                                QueueFlags, QueueFlagBits, QueueFamilyProperties,
+                                ExtensionProperties};
 
 use libc::c_char;
 use std::ffi::CString;
