@@ -16,6 +16,9 @@ pub use self::physical_device::{PhysicalDevice, PhysicalDeviceType, PhysicalDevi
                                 QueueFlags, QueueFlagBits, QueueFamilyProperties,
                                 ExtensionProperties};
 
+mod device;
+pub use self::device::Device;
+
 use libc::c_char;
 use std::ffi::CString;
 use std::ptr;

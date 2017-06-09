@@ -3,8 +3,8 @@
 use std::mem;
 use std::str;
 use std::ptr;
-use vks::*;
 use std::ffi::CStr;
+use vks::*;
 use {Error, Version, InstanceLoader};
 use {DeviceSize, SampleCountFlags, Bool32, Extent3D};
 #[cfg(feature = "khr_surface")]
@@ -24,6 +24,11 @@ impl PhysicalDevice {
         Ok(PhysicalDevice {
             device: vk
         })
+    }
+
+    pub fn inner(&self) -> VkPhysicalDevice
+    {
+        self.device
     }
 }
 
