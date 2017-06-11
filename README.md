@@ -3,8 +3,7 @@
 THIS CRATE IS IN VERY EARLY DEVELOPMENT and may not persist, so use at your own risk!
 
 This crate provides a high-level rust interface to the Khronos Group's Vulkan API.
-It uses Dennis Hamester's `vk-sys` (https://gitlab.com/dennis-hamester/vk-sys) for the
-low-level interface.
+It uses Dennis Hamester's `vks` crate for the low-level interface.
 
 Like most high-level interfaces in rust, it attempts to expose all functionality without
 making any decisions for you.
@@ -13,9 +12,9 @@ making any decisions for you.
   any unsafe code.
 * Types use rust-friendly snake case naming. In many cases, these are bit-for-bit with the C
   types and memory is simply transmuted (a compiler sugar no-op). However in some cases the
-  data is modified to be more rust friendly (for example: String) or to save memory (for
-  exaple, a bit vector may be used rather than a long struct of many 32-bit boolean fields).
-* Some functions are re-organized as methods of objects where it is logical to do so.
+  data is modified to be more rust friendly (for example: Vec<u8> instead of null-terminated
+  strings).
+* Functions are mostly organized as methods of objects where it is logical to do so.
 * Names are sometimes changed, usually shortened, especially where methods would be repeating
   the name of the object they are called on.
 * Fields which cannot be otherwise are, where possible, hidden from you (e.g. the sType fields,
@@ -30,6 +29,9 @@ adherance to all of these rules, more complicated data structure organisation an
 tricks would be required. This is no small job, and we punt on it. If you want such a thing,
 I direct your attention to the `vulkano` (https://github.com/tomaka/vulkano) crate, where
 such work is ongoing.
+
+THE WARNING BEARS REPEATING:  WE ARE IN VERY EARLY DEVELOPMENT.  Mostly we are currently
+implementing only those features that the author needs in his higher-level crate.
 
 ## License
 
