@@ -11,7 +11,8 @@ mod surface;
 pub use self::surface::Surface;
 
 mod physical_device;
-pub use self::physical_device::{PhysicalDevice, PhysicalDeviceType, PhysicalDeviceLimits,
+pub use self::physical_device::{PhysicalDevice, PhysicalDeviceFeatures,
+                                PhysicalDeviceType, PhysicalDeviceLimits,
                                 PhysicalDeviceProperties, PhysicalDeviceSparseProperties,
                                 QueueFlags, QueueFlagBits, QueueFamilyProperties,
                                 ExtensionProperties};

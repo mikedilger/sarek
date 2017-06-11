@@ -3,7 +3,7 @@ use std::mem;
 use std::ptr;
 use vks::*;
 use {Error, InstanceLoader, Instance};
-use instance::PhysicalDevice;
+use instance::{PhysicalDevice, PhysicalDeviceFeatures};
 
 pub struct Device {
     device: VkDevice,
@@ -28,12 +28,14 @@ impl Drop for Device {
 }
 
 impl Instance {
-    pub fn create_device(&self, loader: InstanceLoader, physical_device: PhysicalDevice,
-                         enabled_physical_device_features: &VkPhysicalDeviceFeatures,
+    pub fn create_device(&self, loader: InstanceLoader, physical_device: &PhysicalDevice,
+                         enabled_physical_device_features: PhysicalDeviceFeatures,
                          queue_family_index: u32)
                          -> Result<Device, Error>
     {
         let device_extension_names = [ VK_KHR_SWAPCHAIN_EXTENSION_NAME.as_ptr() as *const i8 ];
+
+        let enabled_features = enabled_physical_device_features.into_vk();
 
         let priorities = [ 1.0 ];
 
@@ -56,7 +58,7 @@ impl Instance {
             ppEnabledLayerNames: ptr::null(),
             enabledExtensionCount: device_extension_names.len() as u32,
             ppEnabledExtensionNames: device_extension_names.as_ptr(),
-            pEnabledFeatures: enabled_physical_device_features
+            pEnabledFeatures: &enabled_features
         };
 
         let vkdevice = unsafe {
