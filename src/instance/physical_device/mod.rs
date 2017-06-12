@@ -26,7 +26,7 @@ use std::mem;
 use std::str;
 use std::ptr;
 use vks::*;
-use {Error, InstanceLoader};
+use {Error, InstanceLoader, Format, FormatProperties};
 #[cfg(feature = "khr_surface")]
 use instance::surface::{Surface, SurfaceFormat, SurfaceCapabilities, PresentMode};
 
@@ -268,6 +268,21 @@ impl PhysicalDevice {
         let output: Vec<PresentMode> = present_modes.drain(..).map(|pm| From::from(pm))
             .collect();
         Ok(output)
+    }
+
+    pub fn get_format_properties(&self, loader: &InstanceLoader, format: Format)
+                                 -> Result<FormatProperties, Error>
+    {
+        let mut format_properties: VkFormatProperties = unsafe {
+            mem::uninitialized()
+        };
+        unsafe {
+            (loader.0.core.vkGetPhysicalDeviceFormatProperties)(
+                self.device,
+                format.into(),
+                &mut format_properties);
+        }
+        Ok(From::from(format_properties))
     }
 }
 
