@@ -6,7 +6,7 @@ use std::mem;
 use std::ptr;
 use vks::*;
 use {Error, InstanceLoader, Instance};
-use instance::{PhysicalDevice, PhysicalDeviceFeatures};
+use instance::physical_device::{PhysicalDevice, PhysicalDeviceFeatures};
 
 pub type Queue = VkQueue;
 

@@ -10,21 +10,15 @@ mod surface;
 #[cfg(feature = "khr_surface")]
 pub use self::surface::Surface;
 
-mod physical_device;
-pub use self::physical_device::{PhysicalDevice, PhysicalDeviceFeatures,
-                                PhysicalDeviceType, PhysicalDeviceLimits,
-                                PhysicalDeviceProperties, PhysicalDeviceSparseProperties,
-                                QueueFlags, QueueFlagBits, QueueFamilyProperties,
-                                ExtensionProperties};
-
-mod device;
-pub use self::device::{Device, Queue};
+pub mod physical_device;
+pub mod device;
 
 use libc::c_char;
 use std::ffi::CString;
 use std::ptr;
 use std::mem;
 use vks::*;
+use self::physical_device::PhysicalDevice;
 
 use {Error, Version};
 
