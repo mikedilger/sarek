@@ -13,6 +13,7 @@ winit = "0.6"
 image = "0.10"
 libc = "0.2.21"
 vks = { version = "0.16", default-features = false }
+bitflags = "0.9"
 
 [target.'cfg(windows)'.dependencies]
 user32-sys = "0.2"

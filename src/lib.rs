@@ -5,6 +5,7 @@ extern crate image;
 extern crate libc;
 #[cfg(windows)] extern crate user32;
 #[cfg(windows)] extern crate winapi;
+#[macro_use] extern crate bitflags;
 
 // Include our macros early
 include!(concat!(env!("CARGO_MANIFEST_DIR"), "/src/macros.rs"));
