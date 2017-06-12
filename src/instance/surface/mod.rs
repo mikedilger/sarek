@@ -2,6 +2,9 @@
 mod surface_format;
 pub use self::surface_format::SurfaceFormat;
 
+mod surface_capabilities;
+pub use self::surface_capabilities::SurfaceCapabilities;
+
 use std::mem;
 use std::ptr;
 use vks::*;

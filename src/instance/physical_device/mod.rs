@@ -20,10 +20,8 @@ use std::ffi::CStr;
 use vks::*;
 use {Error, Version, InstanceLoader};
 #[cfg(feature = "khr_surface")]
-use instance::surface::{Surface, SurfaceFormat};
+use instance::surface::{Surface, SurfaceFormat, SurfaceCapabilities};
 
-#[cfg(feature = "khr_surface")]
-pub type SurfaceCapabilities = VkSurfaceCapabilitiesKHR;
 #[cfg(feature = "khr_surface")]
 pub type PresentMode = VkPresentModeKHR;
 
@@ -358,7 +356,7 @@ impl PhysicalDevice {
             ));
             capabilities
         };
-        Ok(capabilities)
+        Ok(From::from(capabilities))
     }
 
     #[cfg(feature = "khr_surface")]
