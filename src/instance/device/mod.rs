@@ -1,4 +1,7 @@
 
+mod loader;
+use self::loader::DeviceLoader;
+
 use std::mem;
 use std::ptr;
 use vks::*;
@@ -7,7 +10,7 @@ use instance::{PhysicalDevice, PhysicalDeviceFeatures};
 
 pub struct Device {
     device: VkDevice,
-    loader: InstanceLoader,
+    loader: DeviceLoader,
 }
 
 impl Device {
@@ -28,7 +31,8 @@ impl Drop for Device {
 }
 
 impl Instance {
-    pub fn create_device(&self, loader: InstanceLoader, physical_device: &PhysicalDevice,
+    pub fn create_device(&self, instance_loader: InstanceLoader,
+                         physical_device: &PhysicalDevice,
                          enabled_physical_device_features: PhysicalDeviceFeatures,
                          queue_family_index: u32)
                          -> Result<Device, Error>
@@ -63,7 +67,7 @@ impl Instance {
 
         let vkdevice = unsafe {
             let mut vkdevice: VkDevice = mem::uninitialized();
-            vk_try!((loader.0.core.vkCreateDevice)(
+            vk_try!((instance_loader.0.core.vkCreateDevice)(
                 physical_device.inner(),
                 &create_info,
                 ptr::null(),
@@ -71,9 +75,12 @@ impl Instance {
             vkdevice
         };
 
+        let mut device_loader = DeviceLoader::new();
+        device_loader.load(vkdevice)?;
+
         Ok(Device {
             device: vkdevice,
-            loader: loader
+            loader: device_loader
         })
     }
 }
