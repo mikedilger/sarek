@@ -468,4 +468,4 @@ impl PhysicalDevice {
 }
 
 #[cfg(feature = "khr_get_physical_device_properties2")]
-include!(concat!(env!("CARGO_MANIFEST_DIR"), "/src/instance/khr_get_physical_device_properties2_1.rs"));
+include!(concat!(env!("CARGO_MANIFEST_DIR"), "/src/instance/physical_device/khr_get_physical_device_properties2_1.rs"));
