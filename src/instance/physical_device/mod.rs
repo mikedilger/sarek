@@ -8,6 +8,11 @@ pub use self::physical_device_limits::{PhysicalDeviceLimits, DeviceSize};
 mod physical_device_sparse_properties;
 pub use self::physical_device_sparse_properties::PhysicalDeviceSparseProperties;
 
+mod queue_family_properties;
+pub use self::queue_family_properties::{QueueFamilyProperties, QueueFlags};
+pub use self::queue_family_properties::{QUEUE_FLAGS_GRAPHICS_BIT, QUEUE_FLAGS_COMPUTE_BIT,
+                                        QUEUE_FLAGS_TRANSFER_BIT, QUEUE_FLAGS_SPARSE_BINDING_BIT};
+
 use std::mem;
 use std::str;
 use std::ptr;
@@ -44,34 +49,6 @@ impl PhysicalDevice {
     pub fn inner(&self) -> VkPhysicalDevice
     {
         self.device
-    }
-}
-
-pub type QueueFlags = VkQueueFlags;
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-#[repr(C)]
-pub enum QueueFlagBits {
-    GraphicsBit = 1,
-    ComputeBit = 2,
-    TransferBit = 4,
-    SparseBindingBit = 8,
-}
-
-#[derive(Debug, Clone)]
-pub struct QueueFamilyProperties {
-    pub queue_flags: QueueFlags,
-    pub queue_count: u32,
-    pub timestamp_valid_bits: u32,
-    pub min_image_transfer_granularity: Extent3D,
-}
-impl From<VkQueueFamilyProperties> for QueueFamilyProperties {
-    fn from(vk: VkQueueFamilyProperties) -> QueueFamilyProperties {
-        assert_eq!(mem::size_of::<VkQueueFamilyProperties>(),
-                   mem::size_of::<QueueFamilyProperties>());
-        unsafe {
-            mem::transmute(vk)
-        }
     }
 }
 
