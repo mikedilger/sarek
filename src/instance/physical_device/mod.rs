@@ -13,6 +13,9 @@ pub use self::queue_family_properties::{QueueFamilyProperties, QueueFlags};
 pub use self::queue_family_properties::{QUEUE_FLAGS_GRAPHICS_BIT, QUEUE_FLAGS_COMPUTE_BIT,
                                         QUEUE_FLAGS_TRANSFER_BIT, QUEUE_FLAGS_SPARSE_BINDING_BIT};
 
+mod physical_device_properties;
+pub use self::physical_device_properties::PhysicalDeviceProperties;
+
 use std::mem;
 use std::str;
 use std::ptr;
@@ -42,20 +45,6 @@ impl PhysicalDevice {
     {
         self.device
     }
-}
-
-/// See vulkan specification, section 4.1 Physical Devices
-#[derive(Debug, Clone)]
-pub struct PhysicalDeviceProperties {
-    pub api_version: Version,
-    pub driver_version: u32,
-    pub vendor_id: u32,
-    pub device_id: u32,
-    pub device_type: PhysicalDeviceType,
-    pub device_name: String,
-    pub pipeline_cache_uuid: [u8; VK_UUID_SIZE],
-    pub limits: PhysicalDeviceLimits,
-    pub sparse_properties: PhysicalDeviceSparseProperties,
 }
 
 #[derive(Debug, Clone)]
@@ -177,23 +166,7 @@ impl PhysicalDevice {
             )
         }
 
-        Ok(PhysicalDeviceProperties {
-            api_version: Version::from_vk(properties.apiVersion),
-            driver_version: properties.driverVersion,
-            vendor_id: properties.vendorID,
-            device_id: properties.deviceID,
-            device_type: unsafe { mem::transmute(properties.deviceType) },
-            device_name:  unsafe {
-                str::from_utf8(
-                    CStr::from_ptr(
-                        properties.deviceName.as_ptr())
-                        .to_bytes())?
-                .to_owned()
-            },
-            pipeline_cache_uuid: properties.pipelineCacheUUID.clone(),
-            limits: From::from(properties.limits),
-            sparse_properties: From::from(properties.sparseProperties),
-        })
+        Ok(From::from(properties))
     }
 
     // fixme: need custom version for khr_get_physical_device_properties2
