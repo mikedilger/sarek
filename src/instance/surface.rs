@@ -1,7 +1,6 @@
 
 use std::mem;
 use std::ptr;
-use std::sync::Arc;
 use vks::*;
 use winit;
 use super::{Instance, InstanceLoader};
