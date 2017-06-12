@@ -1,4 +1,7 @@
 
+mod physical_device_type;
+pub use self::physical_device_type::PhysicalDeviceType;
+
 use std::mem;
 use std::str;
 use std::ptr;
@@ -36,17 +39,6 @@ impl PhysicalDevice {
     {
         self.device
     }
-}
-
-/// See vulkan specification, section 4.1 Physical Devices
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-#[repr(C)]
-pub enum PhysicalDeviceType {
-    Other = 0,
-    IntegratedGPU = 1,
-    DiscreteGPU = 2,
-    VirtualGPU = 3,
-    CPU = 4
 }
 
 /// See vulkan specification, section 4.1 Physical Devices
