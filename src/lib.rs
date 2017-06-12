@@ -167,5 +167,4 @@ pub type Bool32 = VkBool32;
 pub type SampleCountFlags = VkSampleCountFlags; // u32
 pub type Extent3D = VkExtent3D;
 pub type Extent2D = VkExtent2D;
-pub type Format = VkFormat; // u32
 pub type ImageUsageFlags = VkImageUsageFlags; // u32

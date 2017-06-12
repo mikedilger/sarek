@@ -8,6 +8,9 @@ pub use self::surface_capabilities::SurfaceCapabilities;
 mod present_mode;
 pub use self::present_mode::PresentMode;
 
+mod format;
+pub use self::format::Format;
+
 use std::mem;
 use std::ptr;
 use vks::*;
@@ -21,6 +24,7 @@ use winapi;
 use user32;
 
 pub type ColorSpace = VkColorSpaceKHR; // u32
+pub const COLORSPACE_SRGB_NONLINEAR: ColorSpace = VK_COLORSPACE_SRGB_NONLINEAR_KHR;
 pub type SurfaceTransformFlags = VkSurfaceTransformFlagsKHR; // u32
 pub type CompositeAlphaFlags = VkCompositeAlphaFlagsKHR; // u32
 
