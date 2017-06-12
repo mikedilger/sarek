@@ -398,6 +398,7 @@ impl PhysicalDevice {
                 properties.as_mut_ptr(),
             );
         }
+        assert_eq!(property_count as usize, capacity);
 
         // Trust the data now in the properties vector
         let properties = unsafe {
@@ -439,6 +440,7 @@ impl PhysicalDevice {
                 &mut property_count, // pProprtyCount: *mut u32
                 properties.as_mut_ptr()); // pProperties: *mut VkExtensionProperties
         }
+        assert_eq!(property_count as usize, capacity);
 
         // Trust the data now in the properties vector
         let properties = unsafe {
