@@ -5,13 +5,16 @@ pub use self::physical_device_type::PhysicalDeviceType;
 mod physical_device_limits;
 pub use self::physical_device_limits::{PhysicalDeviceLimits, DeviceSize};
 
+mod physical_device_sparse_properties;
+pub use self::physical_device_sparse_properties::PhysicalDeviceSparseProperties;
+
 use std::mem;
 use std::str;
 use std::ptr;
 use std::ffi::CStr;
 use vks::*;
 use {Error, Version, InstanceLoader};
-use {Bool32, Extent3D};
+use Extent3D;
 #[cfg(feature = "khr_surface")]
 use instance::{Surface};
 
@@ -41,27 +44,6 @@ impl PhysicalDevice {
     pub fn inner(&self) -> VkPhysicalDevice
     {
         self.device
-    }
-}
-
-/// See vulkan specification, section 4.1 Physical Devices
-// consider using a bit vector in a u8
-#[derive(Debug, Clone)]
-pub struct PhysicalDeviceSparseProperties {
-    pub residency_standard_2d_block_shape: Bool32,
-    pub residency_standard_2d_multisample_block_shape: Bool32,
-    pub residency_standard_3d_block_shape: Bool32,
-    pub residency_aligned_mip_size: Bool32,
-    pub residency_non_resident_strict: Bool32,
-}
-
-impl From<VkPhysicalDeviceSparseProperties> for PhysicalDeviceSparseProperties {
-    fn from(vk: VkPhysicalDeviceSparseProperties) -> PhysicalDeviceSparseProperties {
-        assert_eq!(mem::size_of::<VkPhysicalDeviceSparseProperties>(),
-                   mem::size_of::<PhysicalDeviceSparseProperties>());
-        unsafe {
-            mem::transmute(vk)
-        }
     }
 }
 
