@@ -1,7 +1,8 @@
 
 use std::mem;
 use vks::*;
-use super::{ColorSpace, Format};
+use super::ColorSpace;
+use Format;
 
 #[repr(C)]
 #[derive(Debug, Clone)]

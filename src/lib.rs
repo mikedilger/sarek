@@ -19,6 +19,9 @@ pub use version::Version;
 pub mod instance;
 pub use instance::{InstanceLoader, Instance};
 
+pub mod format;
+pub use format::*;
+
 use std::ptr;
 use std::mem;
 use std::str;

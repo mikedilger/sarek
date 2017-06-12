@@ -8,9 +8,6 @@ pub use self::surface_capabilities::SurfaceCapabilities;
 mod present_mode;
 pub use self::present_mode::PresentMode;
 
-mod format;
-pub use self::format::Format;
-
 mod surface_transform_flags;
 pub use self::surface_transform_flags::*;
 
