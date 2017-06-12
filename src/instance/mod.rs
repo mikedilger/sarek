@@ -6,9 +6,7 @@ mod debug;
 pub use self::debug::DebugCallback;
 
 #[cfg(feature = "khr_surface")]
-mod surface;
-#[cfg(feature = "khr_surface")]
-pub use self::surface::Surface;
+pub mod surface;
 
 pub mod physical_device;
 pub mod device;

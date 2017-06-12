@@ -19,12 +19,9 @@ use std::ptr;
 use std::ffi::CStr;
 use vks::*;
 use {Error, Version, InstanceLoader};
-use Extent3D;
 #[cfg(feature = "khr_surface")]
-use instance::{Surface};
+use instance::surface::{Surface, SurfaceFormat};
 
-#[cfg(feature = "khr_surface")]
-pub type SurfaceFormat = VkSurfaceFormatKHR;
 #[cfg(feature = "khr_surface")]
 pub type SurfaceCapabilities = VkSurfaceCapabilitiesKHR;
 #[cfg(feature = "khr_surface")]
@@ -337,15 +334,15 @@ impl PhysicalDevice {
         assert_eq!(count as usize, capacity);
 
         // Trust the data now in the surface_formats vector
-        let surface_formats = unsafe {
+        let mut surface_formats = unsafe {
             let ptr = surface_formats.as_mut_ptr();
             mem::forget(surface_formats);
             Vec::from_raw_parts(ptr, count as usize, capacity as usize)
         };
 
-        // FIXME: Translate for output
-
-        Ok(surface_formats)
+        // Translate for output
+        let output = surface_formats.drain(..).map(|sf| From::from(sf)).collect();
+        Ok(output)
     }
 
     #[cfg(feature = "khr_surface")]

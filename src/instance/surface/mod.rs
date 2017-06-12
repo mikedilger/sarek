@@ -1,4 +1,7 @@
 
+mod surface_format;
+pub use self::surface_format::SurfaceFormat;
+
 use std::mem;
 use std::ptr;
 use vks::*;
@@ -10,6 +13,10 @@ use Error;
 use winapi;
 #[cfg(windows)]
 use user32;
+
+pub type ColorSpace = VkColorSpaceKHR; // u32
+pub type SurfaceTransformFlags = VkSurfaceTransformFlagsKHR; // u32
+pub type CompositeAlphaFlags = VkCompositeAlphaFlagsKHR; // u32
 
 pub struct Surface {
     surface: VkSurfaceKHR,
