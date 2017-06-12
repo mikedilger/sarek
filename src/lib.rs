@@ -1,7 +1,7 @@
 
 extern crate vks;
 extern crate winit;
-extern crate image;
+extern crate image as imageformat;
 extern crate libc;
 #[cfg(windows)] extern crate user32;
 #[cfg(windows)] extern crate winapi;
@@ -21,6 +21,9 @@ pub use instance::{InstanceLoader, Instance};
 
 pub mod format;
 pub use format::*;
+
+pub mod image;
+pub use image::*;
 
 use std::ptr;
 use std::mem;
@@ -170,4 +173,3 @@ pub type Bool32 = VkBool32;
 pub type SampleCountFlags = VkSampleCountFlags; // u32
 pub type Extent3D = VkExtent3D;
 pub type Extent2D = VkExtent2D;
-pub type ImageUsageFlags = VkImageUsageFlags; // u32
