@@ -21,7 +21,7 @@ use std::str;
 use std::ptr;
 use std::ffi::CStr;
 use vks::*;
-use {Error, Version, InstanceLoader};
+use {Error, InstanceLoader};
 #[cfg(feature = "khr_surface")]
 use instance::surface::{Surface, SurfaceFormat, SurfaceCapabilities, PresentMode};
 
