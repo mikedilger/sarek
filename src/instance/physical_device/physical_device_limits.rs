@@ -2,8 +2,7 @@
 use std::mem;
 use vks::*;
 use {Bool32, SampleCountFlags};
-
-pub type DeviceSize = VkDeviceSize; // u64
+use super::DeviceSize;
 
 /// See vulkan specification, section 4.1 Physical Devices
 #[repr(C)] // laid out exactly like VkPhysicalDeviceLimits so we can just transmute

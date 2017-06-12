@@ -3,7 +3,7 @@ mod physical_device_type;
 pub use self::physical_device_type::PhysicalDeviceType;
 
 mod physical_device_limits;
-pub use self::physical_device_limits::{PhysicalDeviceLimits, DeviceSize};
+pub use self::physical_device_limits::PhysicalDeviceLimits;
 
 mod physical_device_sparse_properties;
 pub use self::physical_device_sparse_properties::PhysicalDeviceSparseProperties;
@@ -22,6 +22,9 @@ pub use self::extension_properties::ExtensionProperties;
 mod physical_device_features;
 pub use self::physical_device_features::PhysicalDeviceFeatures;
 
+mod physical_device_memory_properties;
+pub use self::physical_device_memory_properties::PhysicalDeviceMemoryProperties;
+
 use std::mem;
 use std::str;
 use std::ptr;
@@ -29,6 +32,8 @@ use vks::*;
 use {Error, InstanceLoader, Format, FormatProperties};
 #[cfg(feature = "khr_surface")]
 use instance::surface::{Surface, SurfaceFormat, SurfaceCapabilities, PresentMode};
+
+pub type DeviceSize = VkDeviceSize; // u64
 
 /// See vulkan specification, section 4.1 Physical Devices
 pub struct PhysicalDevice {
@@ -283,6 +288,20 @@ impl PhysicalDevice {
                 &mut format_properties);
         }
         Ok(From::from(format_properties))
+    }
+
+    pub fn get_memory_properties(&self, loader: &InstanceLoader)
+                                 -> Result<PhysicalDeviceMemoryProperties, Error>
+    {
+        let mut memory_properties: VkPhysicalDeviceMemoryProperties = unsafe {
+            mem::uninitialized()
+        };
+        unsafe {
+            (loader.0.core.vkGetPhysicalDeviceMemoryProperties)(
+                self.device,
+                &mut memory_properties);
+        }
+        Ok(From::from(memory_properties))
     }
 }
 
