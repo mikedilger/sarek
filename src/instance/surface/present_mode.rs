@@ -1,6 +1,7 @@
 
 use vks::VkPresentModeKHR;
 
+#[derive(Debug, Clone)]
 pub struct PresentMode(VkPresentModeKHR); // u32
 
 impl From<VkPresentModeKHR> for PresentMode {
