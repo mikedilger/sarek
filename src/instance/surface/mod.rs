@@ -11,6 +11,9 @@ pub use self::present_mode::PresentMode;
 mod format;
 pub use self::format::Format;
 
+mod surface_transform_flags;
+pub use self::surface_transform_flags::*;
+
 use std::mem;
 use std::ptr;
 use vks::*;
@@ -25,7 +28,6 @@ use user32;
 
 pub type ColorSpace = VkColorSpaceKHR; // u32
 pub const COLORSPACE_SRGB_NONLINEAR: ColorSpace = VK_COLORSPACE_SRGB_NONLINEAR_KHR;
-pub type SurfaceTransformFlags = VkSurfaceTransformFlagsKHR; // u32
 pub type CompositeAlphaFlags = VkCompositeAlphaFlagsKHR; // u32
 
 pub struct Surface {
