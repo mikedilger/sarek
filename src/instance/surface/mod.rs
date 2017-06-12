@@ -5,6 +5,9 @@ pub use self::surface_format::SurfaceFormat;
 mod surface_capabilities;
 pub use self::surface_capabilities::SurfaceCapabilities;
 
+mod present_mode;
+pub use self::present_mode::PresentMode;
+
 use std::mem;
 use std::ptr;
 use vks::*;

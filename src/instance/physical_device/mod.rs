@@ -20,10 +20,7 @@ use std::ffi::CStr;
 use vks::*;
 use {Error, Version, InstanceLoader};
 #[cfg(feature = "khr_surface")]
-use instance::surface::{Surface, SurfaceFormat, SurfaceCapabilities};
-
-#[cfg(feature = "khr_surface")]
-pub type PresentMode = VkPresentModeKHR;
+use instance::surface::{Surface, SurfaceFormat, SurfaceCapabilities, PresentMode};
 
 /// See vulkan specification, section 4.1 Physical Devices
 pub struct PhysicalDevice {
@@ -388,14 +385,16 @@ impl PhysicalDevice {
         }
 
         // Trust the data now in the present_modes vector
-        let present_modes = unsafe {
+        let mut present_modes = unsafe {
             let ptr = present_modes.as_mut_ptr();
             mem::forget(present_modes);
             Vec::from_raw_parts(ptr, count as usize, count as usize)
         };
 
-        // FIXME: Translate for output
-        Ok(present_modes)
+        // Translate for output
+        let output: Vec<PresentMode> = present_modes.drain(..).map(|pm| From::from(pm))
+            .collect();
+        Ok(output)
     }
 }
 
