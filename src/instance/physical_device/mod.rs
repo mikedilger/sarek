@@ -16,10 +16,12 @@ pub use self::queue_family_properties::{QUEUE_FLAGS_GRAPHICS_BIT, QUEUE_FLAGS_CO
 mod physical_device_properties;
 pub use self::physical_device_properties::PhysicalDeviceProperties;
 
+mod extension_properties;
+pub use self::extension_properties::ExtensionProperties;
+
 use std::mem;
 use std::str;
 use std::ptr;
-use std::ffi::CStr;
 use vks::*;
 use {Error, InstanceLoader};
 #[cfg(feature = "khr_surface")]
@@ -44,24 +46,6 @@ impl PhysicalDevice {
     pub fn inner(&self) -> VkPhysicalDevice
     {
         self.device
-    }
-}
-
-#[derive(Debug, Clone)]
-pub struct ExtensionProperties {
-    pub extension_name: String,
-    pub spec_version: u32,
-}
-impl From<VkExtensionProperties> for ExtensionProperties {
-    fn from(vk: VkExtensionProperties) -> ExtensionProperties {
-        ExtensionProperties {
-            extension_name: unsafe {
-                String::from_utf8_lossy(
-                    CStr::from_ptr(vk.extensionName.as_ptr()).to_bytes()
-                ).into_owned()
-            },
-            spec_version: vk.specVersion
-        }
     }
 }
 
