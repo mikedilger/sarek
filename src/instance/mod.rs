@@ -18,7 +18,7 @@ pub use self::physical_device::{PhysicalDevice, PhysicalDeviceFeatures,
                                 ExtensionProperties};
 
 mod device;
-pub use self::device::Device;
+pub use self::device::{Device, Queue};
 
 use libc::c_char;
 use std::ffi::CString;

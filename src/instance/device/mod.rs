@@ -8,6 +8,8 @@ use vks::*;
 use {Error, InstanceLoader, Instance};
 use instance::{PhysicalDevice, PhysicalDeviceFeatures};
 
+pub type Queue = VkQueue;
+
 pub struct Device {
     device: VkDevice,
     loader: DeviceLoader,
@@ -84,3 +86,22 @@ impl Instance {
         })
     }
 }
+
+impl Device {
+    pub fn get_queue(&self, family_index: u32, queue_index: u32)
+                     -> Result<Queue, Error>
+    {
+        let vkqueue = unsafe {
+            let mut vkqueue: VkQueue = mem::uninitialized();
+            (self.loader.0.core.vkGetDeviceQueue)(
+                self.device,
+                family_index,
+                queue_index,
+                &mut vkqueue
+            );
+            vkqueue
+        };
+        Ok(vkqueue)
+    }
+}
+
