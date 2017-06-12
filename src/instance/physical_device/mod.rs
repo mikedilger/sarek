@@ -1,5 +1,4 @@
 
-
 use std::mem;
 use std::str;
 use std::ptr;
@@ -9,6 +8,13 @@ use {Error, Version, InstanceLoader};
 use {DeviceSize, SampleCountFlags, Bool32, Extent3D};
 #[cfg(feature = "khr_surface")]
 use instance::{Surface};
+
+#[cfg(feature = "khr_surface")]
+pub type SurfaceFormat = VkSurfaceFormatKHR;
+#[cfg(feature = "khr_surface")]
+pub type SurfaceCapabilities = VkSurfaceCapabilitiesKHR;
+#[cfg(feature = "khr_surface")]
+pub type PresentMode = VkPresentModeKHR;
 
 /// See vulkan specification, section 4.1 Physical Devices
 pub struct PhysicalDevice {
@@ -464,6 +470,103 @@ impl PhysicalDevice {
             ));
             supported
         } != 0)
+    }
+
+    #[cfg(feature = "khr_surface")]
+    pub fn get_surface_formats(&self, loader: &InstanceLoader, surface: &Surface)
+                               -> Result<Vec<SurfaceFormat>, Error>
+    {
+        // Call once to get the count
+        let mut count: u32 = 0;
+        unsafe {
+            vk_try!((loader.0.khr_surface.vkGetPhysicalDeviceSurfaceFormatsKHR)(
+                self.device,
+                surface.inner(),
+                &mut count,
+                ptr::null_mut()
+            ));
+        }
+
+        // Prepare room for the surface_formats output
+        let capacity: usize = count as usize;
+        let mut surface_formats: Vec<VkSurfaceFormatKHR> = Vec::with_capacity(capacity);
+
+        // Call again to get the data
+        unsafe {
+            vk_try!((loader.0.khr_surface.vkGetPhysicalDeviceSurfaceFormatsKHR)(
+                self.device,
+                surface.inner(),
+                &mut count,
+                surface_formats.as_mut_ptr()
+            ));
+        }
+        assert_eq!(count as usize, capacity);
+
+        // Trust the data now in the surface_formats vector
+        let surface_formats = unsafe {
+            let ptr = surface_formats.as_mut_ptr();
+            mem::forget(surface_formats);
+            Vec::from_raw_parts(ptr, count as usize, capacity as usize)
+        };
+
+        // FIXME: Translate for output
+
+        Ok(surface_formats)
+    }
+
+    #[cfg(feature = "khr_surface")]
+    pub fn get_surface_capabilities(&self, loader: &InstanceLoader, surface: &Surface)
+                                    -> Result<SurfaceCapabilities, Error>
+    {
+        let capabilities = unsafe {
+            let mut capabilities: VkSurfaceCapabilitiesKHR = mem::uninitialized();
+            vk_try!((loader.0.khr_surface.vkGetPhysicalDeviceSurfaceCapabilitiesKHR)(
+                self.device,
+                surface.inner(),
+                &mut capabilities
+            ));
+            capabilities
+        };
+        Ok(capabilities)
+    }
+
+    #[cfg(feature = "khr_surface")]
+    pub fn get_surface_present_modes(&self, loader: &InstanceLoader, surface: &Surface)
+                                     -> Result<Vec<PresentMode>, Error>
+    {
+        // Call once to get the count
+        let mut count: u32 = 0;
+        unsafe {
+            vk_try!((loader.0.khr_surface.vkGetPhysicalDeviceSurfacePresentModesKHR)(
+                self.device,
+                surface.inner(),
+                &mut count,
+                ptr::null_mut()
+            ));
+        }
+
+        // Prepare room for the present_modes output
+        let mut present_modes: Vec<VkPresentModeKHR> = Vec::with_capacity(count as usize);
+
+        // Call again to get the data
+        unsafe {
+            vk_try!((loader.0.khr_surface.vkGetPhysicalDeviceSurfacePresentModesKHR)(
+                self.device,
+                surface.inner(),
+                &mut count,
+                present_modes.as_mut_ptr(),
+            ));
+        }
+
+        // Trust the data now in the present_modes vector
+        let present_modes = unsafe {
+            let ptr = present_modes.as_mut_ptr();
+            mem::forget(present_modes);
+            Vec::from_raw_parts(ptr, count as usize, count as usize)
+        };
+
+        // FIXME: Translate for output
+        Ok(present_modes)
     }
 }
 
